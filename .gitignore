@@ -1,0 +1,11 @@
+.vs
+Debug
+x64
+Release
+*~
+\#*#
+.DS_Store
+*.VC.db
+xcuserdata
+*.o
+*.d
