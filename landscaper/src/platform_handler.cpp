@@ -1,13 +1,19 @@
 #include "platform_handler.h"
 #include "render_pipeline.h"
 
+platform_handler::platform_handler(void) 
+{
+}
+
 auto platform_handler::create(resource_handler & rh, glm::mat4 & proj) -> void
 {
-	platforms.emplace_back(10.0f, glm::vec3(-16.0f, 0, -16.0f));
+	platforms.emplace_back(3.0f, glm::vec3(-16.0f, 0, -16.0f));
 
 	platforms.back().create(rh);
 
 	create_realistic_texture("res/textures/grass/grass", grass, rh);
+	create_realistic_texture("res/textures/stone/stone", stone, rh);
+
 	create_shaders(proj);
 }
 

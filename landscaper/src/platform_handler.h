@@ -1,5 +1,6 @@
 #pragma once
 
+#include "quad_3D.h"
 #include "mesh.h"
 #include "program.h"
 #include <vector>
@@ -10,7 +11,7 @@ using platform = default_mesh;
 class platform_handler
 {
 public:
-	platform_handler(void) = default;
+	platform_handler(void);
 	// creates first platform
 	auto create(resource_handler & rh, glm::mat4 & proj) -> void;
 
@@ -27,6 +28,8 @@ private:
 	realistic_texture grass;
 	realistic_texture dirt;
 	realistic_texture stone;
+
+//	quad_3D x_side, z_side;
 
 	program shaders;
 };

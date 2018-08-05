@@ -8,20 +8,17 @@
 
 namespace detail {
 
-	template <typename Result, typename Type, typename ... Params>
-	Result construct(Params ... params)
+	template <typename T1, typename T2, typename ... Args> auto construct(Args ... params) -> T1
 	{
-		return Result(static_cast<Type>(params)...);
+		return T1(static_cast<T2>(params)...);
 	}
 
-	template <typename ... T>
-	auto make_array(T && ... params)->std::array <typename std::common_type <T...>::type, sizeof... (T)>
+	template <typename ... T> auto make_array(T && ... params) -> std::array <typename std::common_type <T...>::type, sizeof... (T)>
 	{
 		return { std::forward<T>(params)... };
 	}
 
-	template <typename T, uint32_t N>
-	auto vec_rand(int32_t max) -> glm::vec<N, T, glm::highp>
+	template <typename T, uint32_t N> auto vec_rand(int32_t max) -> glm::vec<N, T, glm::highp>
 	{
 		using type = glm::vec<N, T, glm::highp>;
 		type result;

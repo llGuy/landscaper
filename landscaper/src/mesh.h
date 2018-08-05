@@ -6,8 +6,7 @@
 #include "buffer.h"
 #include "renderable.h"
 
-template<uint32_t Width, uint32_t Depth>
-class mesh : public renderable
+template<uint32_t Width, uint32_t Depth> class mesh : public renderable
 {
 private:
 	static constexpr uint32_t verts_x = Width;

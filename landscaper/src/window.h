@@ -38,8 +38,7 @@ public:
 	auto set_cursor_mv_callback(cursor_mv_callback_func func) -> void;
 	auto set_window_resize_callback(window_resize_callback_func func) -> void;
 
-	template <typename T>
-	auto set_user_pointer(T * ptr = nullptr) -> void;
+	template <typename T> auto set_user_pointer(T * ptr = nullptr) -> void;
 private:
 	int32_t width;
 	int32_t height;
@@ -48,8 +47,7 @@ private:
 	std::unique_ptr<input_handler> inputs;
 };
 
-template <typename T>
-auto window::set_user_pointer(T * ptr) -> void
+template <typename T> auto window::set_user_pointer(T * ptr) -> void
 {
 	glfwSetWindowUserPointer(glfw_window, (!ptr) ? (T *)this : ptr);
 }

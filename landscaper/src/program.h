@@ -15,8 +15,7 @@ public:
 	auto use(void) -> void;
 	auto create_shader(GLenum type, std::string const & dir) -> void;
 public:
-	template <typename ... T>
-	auto link_shaders(T ... attribs) -> void
+	template <typename ... T> auto link_shaders(T ... attribs) -> void
 	{
 		bool success = true;
 		std::for_each(shaders.begin(), shaders.end(),
@@ -32,8 +31,7 @@ public:
 		status();
 	}
 
-	template <typename ... T>
-	auto get_uniform_locations(T ... locs) -> void
+	template <typename ... T> auto get_uniform_locations(T ... locs) -> void
 	{
 		std::array<char const *, sizeof...(locs)> names{ locs... };
 		std::for_each(names.begin(), names.end(), [&](char const * name)
@@ -47,8 +45,7 @@ private:
 	auto attach_shaders(void) -> void;
 	auto delete_shaders(void) -> void;
 
-	template <typename ... T>
-	auto bind_attribs(T ... attribs) -> void
+	template <typename ... T> auto bind_attribs(T ... attribs) -> void
 	{
 		std::array<char const *, sizeof...(attribs)> atts{ attribs... };
 		for (uint32_t i = 0; i < sizeof...(attribs); ++i) glBindAttribLocation(program_id, i, atts[i]);

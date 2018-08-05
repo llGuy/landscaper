@@ -26,6 +26,11 @@ public:
 	virtual auto element_buffer(void) -> std::optional<buffer *> { return {}; };
 	virtual auto model_texture(uint32_t i) -> std::optional<texture *> { return {}; };
 	virtual auto vao(void) -> vertex_layout & { return layout; };
+
+	template <typename ... T> auto attach_attribute(buffer & b, T ... attribs) -> void
+	{
+		layout.attach(b, attribs...);
+	}
 protected:
 	vertex_layout layout;
 };

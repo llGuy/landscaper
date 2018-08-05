@@ -19,8 +19,6 @@ public:
 	inline auto index_ptr(void) -> void * override { return nullptr; }
 	inline auto indexed(void) -> bool override { return false; };
 private:
-
-private:
 	buffer vertex_buffer;
 	std::array<glm::vec3, 4> verts;
 };
