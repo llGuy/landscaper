@@ -9,7 +9,7 @@ auto platform_handler::create(resource_handler & rh, glm::mat4 & proj) -> void
 {
 	platforms.emplace_back(3.0f, glm::vec3(-((float)platform_width) / 2.0f, 0, -((float)platform_depth) / 2.0f)); 
 	platforms.back().create(rh);
-	platforms.emplace_back(10.0f, glm::vec3(-((float)platform_width) / 2.0f, 0, -((float)platform_depth) / 2.0f) + glm::vec3(50.0f, 0, -40.0f));
+	platforms.emplace_back(2.0f, glm::vec3(-((float)platform_width) / 2.0f, 0, -((float)platform_depth) / 2.0f) + glm::vec3(50.0f, 0, -40.0f));
 	platforms.back().create(rh);
 	platforms.emplace_back(5.0f, glm::vec3(-((float)platform_width) / 2.0f, 0, -((float)platform_depth) / 2.0f) + glm::vec3(-35.0f, 0, 30.0f));
 	platforms.back().create(rh);

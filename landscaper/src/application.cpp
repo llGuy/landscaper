@@ -36,6 +36,7 @@ auto application::update(void) -> void
 {
 	appl_window.refresh();
 	state->update(appl_window.user_inputs(), time);
+	fps = 1.0f / time.elapsed();
 	time.reset();
 }
 

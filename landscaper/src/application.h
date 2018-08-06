@@ -26,4 +26,8 @@ private:
 	std::unique_ptr<game_state> state; 
 	resource_handler resources;
 	timer time;
+
+	// debugging
+public:
+	float fps;
 };

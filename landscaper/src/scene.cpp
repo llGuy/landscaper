@@ -38,10 +38,6 @@ auto scene::prepare_water_renderer(timer & time) -> void
 	auto inverted_matrix = invert_matrix(cam);
 	render_scene(inverted_matrix, water.refl_plane(), time, true);
 
-	water.bind_refr();
-	auto view_matrix = cam.view_matrix();
-	render_scene(view_matrix, water.refr_plane(), time, true);
-
 	unbind_all_framebuffers(screen_res.w, screen_res.h);
 	glDisable(GL_CLIP_DISTANCE0);
 	glDisable(GL_BLEND);
@@ -75,7 +71,4 @@ auto scene::update(input_handler & ih, timer & time) -> game_state *
 
 auto scene::render_debugging(void) -> void
 {
-	guis.prepare(DEBUG_0);
-	water.refr_texture().bind(GL_TEXTURE_2D, 0);
-	guis.render();
 }
