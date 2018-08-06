@@ -7,8 +7,8 @@
 
 namespace {
 
-	constexpr uint32_t platform_width = 64;
-	constexpr uint32_t platform_depth = 64;
+	constexpr uint32_t platform_width = 32;
+	constexpr uint32_t platform_depth = 32;
 
 }
 

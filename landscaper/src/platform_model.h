@@ -78,11 +78,11 @@ private:
 		uint32_t index = Width * Depth;
 
 		// create x-facing side
-		glm::vec3 left ( neg_corner.x, height, 0 );
-		glm::vec3 right ( neg_corner.x + (float)(Width) - 1, height, 0 );
+		glm::vec3 left ( neg_corner.x, height, neg_corner.z + (float)(Depth / 2.0f));
+		glm::vec3 right ( neg_corner.x + (float)(Width) - 1, height, neg_corner.z + (float)(Depth / 2.0f) );
 		// create z-facing side
-		glm::vec3 back ( 0, height, neg_corner.z );
-		glm::vec3 front ( 0, height, neg_corner.z + (float)(Depth) - 1 );
+		glm::vec3 back ( neg_corner.x + (float)(Width / 2.0f), height, neg_corner.z );
+		glm::vec3 front ( neg_corner.x + (float)(Width / 2.0f), height, neg_corner.z + (float)(Depth) - 1 );
 
 		auto create_side = [this] (uint32_t & i, glm::vec3 & a, glm::vec3 & b, side s, float half) -> void
 		{  
