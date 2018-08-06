@@ -5,7 +5,14 @@
 #include "program.h"
 #include <vector>
 
-using default_platform_model = platform_model<32, 32>;
+namespace {
+
+	constexpr uint32_t platform_width = 64;
+	constexpr uint32_t platform_depth = 64;
+
+}
+
+using default_platform_model = platform_model<platform_width, platform_depth>;
 using platform = default_platform_model;
 
 class platform_handler

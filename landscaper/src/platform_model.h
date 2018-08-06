@@ -35,7 +35,7 @@ public:
 public:
 	auto indexed(void) -> bool override { return true; };
 	auto count(void) -> uint32_t override { return (Width - 1) * (Depth - 1) * 6 + (6 * 4); };
-	auto index_type(void) -> GLenum override { return GL_UNSIGNED_SHORT; };
+	auto index_type(void) -> GLenum override { return GL_UNSIGNED_INT; };
 	auto index_ptr(void) -> void * override { return nullptr; };
 	auto negative_corner(void) -> glm::vec3 { return glm::vec3(neg_corner.x, height, neg_corner.z); };
 private:
@@ -143,7 +143,7 @@ private:
 		}
 		create_sides_indices();
 		index_buffer.create();
-		index_buffer.fill(indices.size() * sizeof(uint16_t), indices.data(), GL_STATIC_DRAW, GL_ELEMENT_ARRAY_BUFFER);
+		index_buffer.fill(indices.size() * sizeof(uint32_t), indices.data(), GL_STATIC_DRAW, GL_ELEMENT_ARRAY_BUFFER);
 	}
 	auto create_vao(void) -> void
 	{
@@ -161,7 +161,7 @@ private:
 private:
 	glm::vec3 neg_corner;
 	std::array<mesh_vertex, (Width * Depth) + (4 * 4)> vertices;
-	std::array<uint16_t, (Width - 1) * (Depth - 1) * 6 + (6 * 4) /* indices for the sides */> indices;
+	std::array<uint32_t, (Width - 1) * (Depth - 1) * 6 + (6 * 4) /* indices for the sides */> indices;
 
 	buffer index_buffer;
 	buffer vertex_buffer;

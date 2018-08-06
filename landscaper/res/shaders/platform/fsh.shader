@@ -23,7 +23,7 @@ const vec3 light_color = vec3(1, 0.5, 0) * 0.7;
 
 vec3 calculate_diffuse(vec3 normal)
 {
-	float diffuse = clamp(dot(to_light, normal) * 0.5f, -0.2, 1);
+	float diffuse = clamp(dot(to_light, normal) * 0.5f, 0, 1);
 	return vec3(diffuse, diffuse, diffuse);
 }
 
