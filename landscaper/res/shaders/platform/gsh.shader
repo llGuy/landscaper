@@ -8,6 +8,7 @@ out vec3 light_vector;
 out vec3 light_pos_tangent;
 out vec3 to_camera;
 out vec3 to_light;
+out float angle_cos;
 out vec3 test;
 
 in vec2 pass_texture_coords[];
@@ -57,6 +58,7 @@ void main(void)
 
 		);
 
+		angle_cos = dot(normal, vec3(0, 1, 0));
 		light_pos_tangent = to_tangent_space * light_position;
 		light_vector = to_tangent_space * (world_position - light_position);
 		to_camera = to_tangent_space * (camera_position - world_position);

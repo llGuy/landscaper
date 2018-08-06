@@ -61,7 +61,7 @@
     <ClInclude Include="src\input_handler.h" />
     <ClInclude Include="src\lighting.h" />
     <ClInclude Include="src\log.h" />
-    <ClInclude Include="src\mesh.h" />
+    <ClInclude Include="src\platform_model.h" />
     <ClInclude Include="src\platform_handler.h" />
     <ClInclude Include="src\post_proc_stage.h" />
     <ClInclude Include="src\program.h" />

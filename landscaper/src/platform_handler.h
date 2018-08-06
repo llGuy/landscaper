@@ -1,12 +1,12 @@
 #pragma once
 
 #include "quad_3D.h"
-#include "mesh.h"
+#include "platform_model.h"
 #include "program.h"
 #include <vector>
 
-using default_mesh = mesh<32, 32>;
-using platform = default_mesh;
+using default_platform_model = platform_model<32, 32>;
+using platform = default_platform_model;
 
 class platform_handler
 {
@@ -28,8 +28,6 @@ private:
 	realistic_texture grass;
 	realistic_texture dirt;
 	realistic_texture stone;
-
-//	quad_3D x_side, z_side;
 
 	program shaders;
 };

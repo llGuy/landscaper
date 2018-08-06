@@ -26,6 +26,12 @@ auto platform_handler::prepare(glm::vec3 & camera, glm::vec3 & light_pos, glm::v
 	shaders.uniform_3f(&camera[0], 4);
 	shaders.uniform_3f(&light_pos[0], 5);
 	shaders.uniform_4f(&clip_plane[0], 6);
+
+	grass.color.bind(GL_TEXTURE_2D, 0);
+	grass.normal_map.bind(GL_TEXTURE_2D, 1);
+
+	stone.color.bind(GL_TEXTURE_2D, 2);
+	stone.normal_map.bind(GL_TEXTURE_2D, 3);
 }
 
 auto platform_handler::render(glm::mat4 & view_matrix) -> void
@@ -38,8 +44,6 @@ auto platform_handler::render(glm::mat4 & view_matrix) -> void
 		auto neg_corner = plat.negative_corner();
 		shaders.uniform_3f(&neg_corner[0], 2);
 
-		grass.color.bind(GL_TEXTURE_2D, 0);
-		grass.normal_map.bind(GL_TEXTURE_2D, 1);
 		render_model(plat, GL_TRIANGLES);
 	}
 }
@@ -49,10 +53,10 @@ auto platform_handler::create_shaders(glm::mat4 & proj) -> void
 	shaders.create_shader(GL_VERTEX_SHADER, "shaders/platform/vsh.shader");
 	shaders.create_shader(GL_GEOMETRY_SHADER, "shaders/platform/gsh.shader");
 	shaders.create_shader(GL_FRAGMENT_SHADER, "shaders/platform/fsh.shader");
-	shaders.link_shaders("vertex_position");
+	shaders.link_shaders("vertex_position", "texture_coords");
 	shaders.get_uniform_locations("projection_matrix", "view_matrix", "neg_corner", 
 		"dimension", "camera_position", "light_position", "clip_plane",
-		"grass_texture", "grass_normals");
+		"grass_texture", "grass_normals", "stone_texture", "stone_normals");
 	shaders.use(); shaders.uniform_mat4(&proj[0][0], 0);
 
 	grass.color.bind(GL_TEXTURE_2D, 0);
@@ -60,6 +64,9 @@ auto platform_handler::create_shaders(glm::mat4 & proj) -> void
 
 	shaders.uniform_1i(0, 7);
 	shaders.uniform_1i(1, 8);
+
+	shaders.uniform_1i(2, 9);
+	shaders.uniform_1i(3, 10);
 }
 
 auto platform_handler::create_realistic_texture(std::string const & begin_dir, realistic_texture & tex, resource_handler & rh) -> void
