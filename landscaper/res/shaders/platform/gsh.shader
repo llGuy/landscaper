@@ -8,6 +8,7 @@ out vec3 light_vector;
 out vec3 light_pos_tangent;
 out vec3 to_camera;
 out vec3 to_light;
+out vec3 face_normal;
 out float angle_cos;
 out vec3 test;
 
@@ -48,6 +49,7 @@ void main(void)
 
 		vec3 tangent = normalize(calculate_tangent(i, (i + 1) % 3, (i + 2) % 3));
 		vec3 normal = normalize(calculate_normal(i, (i + 1) % 3, (i + 2) % 3));
+		face_normal = normal;
 		vec3 bitangent = normalize(cross(tangent, normal));
 
 		mat3 to_tangent_space = mat3(

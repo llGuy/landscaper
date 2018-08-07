@@ -15,7 +15,7 @@ auto platform_handler::create(resource_handler & rh, glm::mat4 & proj) -> void
 	platforms.back().create(rh);
 
 	create_realistic_texture("res/textures/grass/grass", grass, rh);
-	create_realistic_texture("res/textures/dirt/dirt", stone, rh);
+	create_realistic_texture("res/textures/dirt/dirt", dirt, rh);
 
 	create_shaders(proj);
 }
@@ -33,8 +33,8 @@ auto platform_handler::prepare(glm::vec3 & camera, glm::vec3 & light_pos, glm::v
 	grass.color.bind(GL_TEXTURE_2D, 0);
 	grass.normal_map.bind(GL_TEXTURE_2D, 1);
 
-	stone.color.bind(GL_TEXTURE_2D, 2);
-	stone.normal_map.bind(GL_TEXTURE_2D, 3);
+	dirt.color.bind(GL_TEXTURE_2D, 2);
+	dirt.normal_map.bind(GL_TEXTURE_2D, 3);
 }
 
 auto platform_handler::render(glm::mat4 & view_matrix) -> void
@@ -59,7 +59,7 @@ auto platform_handler::create_shaders(glm::mat4 & proj) -> void
 	shaders.link_shaders("vertex_position", "texture_coords");
 	shaders.get_uniform_locations("projection_matrix", "view_matrix", "neg_corner", 
 		"dimension", "camera_position", "light_position", "clip_plane",
-		"grass_texture", "grass_normals", "stone_texture", "stone_normals");
+		"grass_texture", "grass_normals", "dirt_texture", "dirt_normals");
 	shaders.use(); shaders.uniform_mat4(&proj[0][0], 0);
 
 	grass.color.bind(GL_TEXTURE_2D, 0);

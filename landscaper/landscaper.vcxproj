@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\application.cpp" />
+    <ClCompile Include="src\glow_final_stage.cpp" />
+    <ClCompile Include="src\glow_stage.cpp" />
     <ClCompile Include="src\buffer.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\cube.cpp" />
@@ -28,6 +30,7 @@
     <ClCompile Include="src\entity_handler.cpp" />
     <ClCompile Include="src\framebuffer.cpp" />
     <ClCompile Include="src\gui.cpp" />
+    <ClCompile Include="src\hblur_stage.cpp" />
     <ClCompile Include="src\input_handler.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\platform_handler.cpp" />
@@ -43,11 +46,14 @@
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\timer.cpp" />
     <ClCompile Include="src\vao.cpp" />
+    <ClCompile Include="src\vblur_stage.cpp" />
     <ClCompile Include="src\water.cpp" />
     <ClCompile Include="src\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application.h" />
+    <ClInclude Include="src\glow_final_stage.h" />
+    <ClInclude Include="src\glow_stage.h" />
     <ClInclude Include="src\buffer.h" />
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\cube.h" />
@@ -58,6 +64,7 @@
     <ClInclude Include="src\framebuffer.h" />
     <ClInclude Include="src\game_state.h" />
     <ClInclude Include="src\gui.h" />
+    <ClInclude Include="src\hblur_stage.h" />
     <ClInclude Include="src\input_handler.h" />
     <ClInclude Include="src\lighting.h" />
     <ClInclude Include="src\log.h" />
@@ -78,10 +85,18 @@
     <ClInclude Include="src\texture.h" />
     <ClInclude Include="src\timer.h" />
     <ClInclude Include="src\vao.h" />
+    <ClInclude Include="src\vblur_stage.h" />
     <ClInclude Include="src\water.h" />
     <ClInclude Include="src\window.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shaders\blur\final_fsh.shader" />
+    <None Include="res\shaders\blur\final_vsh.shader" />
+    <None Include="res\shaders\blur\fsh.shader" />
+    <None Include="res\shaders\blur\horizontal_vsh.shader" />
+    <None Include="res\shaders\blur\vertical_vsh.shader" />
+    <None Include="res\shaders\entity\fsh.shader" />
+    <None Include="res\shaders\entity\vsh.shader" />
     <None Include="res\shaders\gui_quad\fsh.shader" />
     <None Include="res\shaders\gui_quad\vsh.shader" />
     <None Include="res\shaders\platform\fsh.shader" />
@@ -89,6 +104,8 @@
     <None Include="res\shaders\platform\vsh.shader" />
     <None Include="res\shaders\sky\fsh.shader" />
     <None Include="res\shaders\sky\vsh.shader" />
+    <None Include="res\shaders\test\fsh.shader" />
+    <None Include="res\shaders\test\vsh.shader" />
     <None Include="res\shaders\water\fsh.shader" />
     <None Include="res\shaders\water\vsh.shader" />
   </ItemGroup>

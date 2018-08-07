@@ -34,7 +34,6 @@ private:
 	
 	realistic_texture grass;
 	realistic_texture dirt;
-	realistic_texture stone;
 
 	program shaders;
 };

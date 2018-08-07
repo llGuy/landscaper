@@ -3,7 +3,7 @@
 
 auto main(int32_t argc, char * argv[]) -> int32_t
 {
-	application app { 1700, 1000 };
+	application app { 1136, 640 };
 	glfw_init();
 	app.init_window();
 	glew_init();

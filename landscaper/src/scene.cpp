@@ -12,6 +12,7 @@ scene::scene(int32_t w, int32_t h, glm::vec2 const & cursor_pos, resource_handle
 	platforms.create(rh, projection);
 	water.create(rh, projection);
 	guis.create(rh);
+	entities.create(projection, rh);
 
 	guis.push(glm::vec2{ -0.5f, +0.5f }, 0.4f);
 
@@ -25,6 +26,11 @@ auto scene::render(timer & time) -> void
 	pipeline.bind_default();
 	auto view_matrix = entities.entity_cam().view_matrix();
 	render_scene(view_matrix, detail::null_vector, time, true);
+
+	pipeline.bind_glow();
+	clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, 0, 0, 0);
+	entities.prepare(view_matrix, detail::null_vector);
+	entities.render();
 
 	pipeline.finalize_process();
 }
@@ -59,6 +65,9 @@ auto scene::render_scene(glm::mat4 & view, glm::vec4 & plane, timer & t, bool re
 
 	sky_box.prepare(view, plane);
 	sky_box.render();
+
+	entities.prepare(view, plane);
+	entities.render();
 }
 
 auto scene::update(input_handler & ih, timer & time) -> game_state *

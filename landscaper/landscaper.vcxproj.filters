@@ -93,6 +93,18 @@
     <ClCompile Include="src\gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\glow_stage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hblur_stage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vblur_stage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glow_final_stage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application.h">
@@ -194,6 +206,18 @@
     <ClInclude Include="src\platform_model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\glow_stage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hblur_stage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vblur_stage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glow_final_stage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\platform\vsh.shader" />
@@ -205,5 +229,14 @@
     <None Include="res\shaders\sky\fsh.shader" />
     <None Include="res\shaders\gui_quad\vsh.shader" />
     <None Include="res\shaders\gui_quad\fsh.shader" />
+    <None Include="res\shaders\entity\vsh.shader" />
+    <None Include="res\shaders\entity\fsh.shader" />
+    <None Include="res\shaders\test\fsh.shader" />
+    <None Include="res\shaders\test\vsh.shader" />
+    <None Include="res\shaders\blur\fsh.shader" />
+    <None Include="res\shaders\blur\vertical_vsh.shader" />
+    <None Include="res\shaders\blur\horizontal_vsh.shader" />
+    <None Include="res\shaders\blur\final_vsh.shader" />
+    <None Include="res\shaders\blur\final_fsh.shader" />
   </ItemGroup>
 </Project>

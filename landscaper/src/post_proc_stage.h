@@ -13,7 +13,7 @@ public:
 
 	virtual auto create(int32_t w, int32_t h) -> void = 0;
 	virtual auto bind(void) -> void = 0;
-	virtual auto render(quad_2D & quad, texture & prev) -> void = 0;
+	virtual auto render(quad_2D & quad, texture & prev) -> void {}
 
 	inline auto output(void) -> texture & { return out; };
 	inline auto fbo(void) -> framebuffer & { return main; }
