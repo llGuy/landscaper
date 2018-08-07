@@ -1,10 +1,15 @@
 #include "hblur_stage.h"
 #include "render_pipeline.h"
 
+hblur_stage::hblur_stage(int32_t s)
+	: scale(s)
+{
+}
+
 auto hblur_stage::create(int32_t width, int32_t height) -> void
 {
-	this->w = width / 8;
-	this->h = height / 8;
+	this->w = width / scale;
+	this->h = height / scale;
 
 	main.create(w, h);
 	main.bind();

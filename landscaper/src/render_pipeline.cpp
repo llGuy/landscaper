@@ -26,14 +26,22 @@ auto clear(int32_t flags, float r, float g, float b) -> void
 
 
 
-
+render_pipeline::render_pipeline(void)
+	: blur_stages{ blur_stage{4, 4}, blur_stage{6, 6}, blur_stage{8, 8} }
+{
+}
 
 auto render_pipeline::create(int32_t w, int32_t h, resource_handler & rh) -> void
 {
 	default_target.create(w, h);
 	glowing_stage.create(w, h);
-	horizontal_blur.create(w, h);
-	vertical_blur.create(w, h);
+
+	for (auto & stage : blur_stages)
+	{
+		stage.h.create(w, h);
+		stage.v.create(w, h);
+	}
+
 	final_glow_stage.create(w, h);
 
 	render_quad.create(rh);
@@ -57,9 +65,8 @@ auto render_pipeline::finalize_process(void) -> void
 {
 	using detail::identity_matrix;
 
-	horizontal_blur.render(render_quad, glowing_stage.output());
-	vertical_blur.render(render_quad, horizontal_blur.output());
-	final_glow_stage.render(render_quad, default_target.output(), vertical_blur.output());
+	carry_blur();
+	final_glow_stage.render(render_quad, default_target.output(), blur_stages[2].v.output());
 
 	unbind_all_framebuffers(default_target.width(), default_target.height());
 	clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, 0, 0, 0);
@@ -70,4 +77,16 @@ auto render_pipeline::finalize_process(void) -> void
 	final_glow_stage.output().bind(GL_TEXTURE_2D, 0);
 
 	render_model(render_quad, GL_TRIANGLE_STRIP);
+}
+
+auto render_pipeline::carry_blur(void) -> void
+{
+	blur_stages[0].h.render(render_quad, glowing_stage.output());
+	blur_stages[0].v.render(render_quad, blur_stages[0].h.output());
+
+	for (uint32_t i = 1; i < blur_stages.size(); ++i)
+	{
+		blur_stages[i].h.render(render_quad, blur_stages[i - 1].v.output());
+		blur_stages[i].v.render(render_quad, blur_stages[i].h.output());
+	}
 }

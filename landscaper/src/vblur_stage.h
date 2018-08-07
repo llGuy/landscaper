@@ -7,6 +7,8 @@
 class vblur_stage : public postproc_stage
 {
 public:
+	vblur_stage(int32_t scale);
+
 	auto create(int32_t w, int32_t h) -> void override;
 	auto bind(void) -> void override;
 	auto render(quad_2D & quad, texture & prev) -> void override;
@@ -16,4 +18,6 @@ public:
 protected:
 	auto create_texture(int32_t w, int32_t h) -> void override;
 	auto create_depth(int32_t w, int32_t h) -> void override;
+private:
+	int32_t scale;
 };
