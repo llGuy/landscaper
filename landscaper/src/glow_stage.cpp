@@ -1,6 +1,6 @@
 #include "glow_stage.h"
 
-auto glow_stage::create(int32_t w, int32_t h) -> void 
+auto glow_stage::create(i32 w, i32 h) -> void 
 {
 	this->w = w;
 	this->h = h;
@@ -23,7 +23,7 @@ auto glow_stage::render(quad_2D & quad, texture & prev) -> void
 	// nothing at the moment
 }
 
-auto glow_stage::create_texture(int32_t w, int32_t h) -> void
+auto glow_stage::create_texture(i32 w, i32 h) -> void
 {
 	out.create();
 	out.bind(GL_TEXTURE_2D);
@@ -31,7 +31,7 @@ auto glow_stage::create_texture(int32_t w, int32_t h) -> void
 	out.int_param(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	out.int_param(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 }
-auto glow_stage::create_depth(int32_t w, int32_t h) -> void
+auto glow_stage::create_depth(i32 w, i32 h) -> void
 {
 	depth.create();
 	depth.bind();

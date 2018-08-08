@@ -16,7 +16,7 @@ public:
 	auto render(void) -> void;
 
 	auto vao(void) -> vertex_layout & { return box.vao(); };
-	auto count(void) -> uint32_t { return 36; };
+	auto count(void) -> u32 { return 36; };
 	auto index_buffer(void) -> buffer & { return **box.element_buffer(); };
 private:
 	auto create_texture(resource_handler & rh) -> void;

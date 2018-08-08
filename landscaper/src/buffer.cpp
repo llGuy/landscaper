@@ -5,7 +5,7 @@ auto unbind_buffers(GLenum point) -> void
 	glBindBuffer(point, 0);
 }
 
-auto buffer::create(void) -> uint32_t
+auto buffer::create(void) -> u32
 {
 	glGenBuffers(1, &id);
 	return id;

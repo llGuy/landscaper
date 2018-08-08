@@ -26,13 +26,13 @@
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\cube.cpp" />
     <ClCompile Include="src\default_stage.cpp" />
-    <ClCompile Include="src\entity.cpp" />
     <ClCompile Include="src\entity_handler.cpp" />
     <ClCompile Include="src\framebuffer.cpp" />
     <ClCompile Include="src\gui.cpp" />
     <ClCompile Include="src\hblur_stage.cpp" />
     <ClCompile Include="src\input_handler.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\physics.cpp" />
     <ClCompile Include="src\platform_handler.cpp" />
     <ClCompile Include="src\program.cpp" />
     <ClCompile Include="src\quad_2D.cpp" />
@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application.h" />
+    <ClInclude Include="src\component.h" />
     <ClInclude Include="src\glow_final_stage.h" />
     <ClInclude Include="src\glow_stage.h" />
     <ClInclude Include="src\buffer.h" />
@@ -68,6 +69,8 @@
     <ClInclude Include="src\input_handler.h" />
     <ClInclude Include="src\lighting.h" />
     <ClInclude Include="src\log.h" />
+    <ClInclude Include="src\physics.h" />
+    <ClInclude Include="src\platform.h" />
     <ClInclude Include="src\platform_model.h" />
     <ClInclude Include="src\platform_handler.h" />
     <ClInclude Include="src\post_proc_stage.h" />
@@ -84,6 +87,7 @@
     <ClInclude Include="src\sky.h" />
     <ClInclude Include="src\texture.h" />
     <ClInclude Include="src\timer.h" />
+    <ClInclude Include="src\types.h" />
     <ClInclude Include="src\vao.h" />
     <ClInclude Include="src\vblur_stage.h" />
     <ClInclude Include="src\water.h" />

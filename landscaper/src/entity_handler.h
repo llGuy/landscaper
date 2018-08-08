@@ -4,6 +4,7 @@
 #include "camera.h"
 #include "cube.h"
 #include "input_handler.h"
+#include "physics.h"
 
 using entity_model = cube;
 
@@ -16,7 +17,7 @@ public:
 	auto prepare(glm::mat4 & view, glm::vec4 & plane) -> void;
 	auto render(void) -> void;
 
-	auto update(input_handler & ih, float elapsed) -> void;
+	auto update(input_handler & ih, physics_handler & ph, f32 elapsed) -> void;
 public:
 	inline auto entity_cam(void) -> camera & { return cam; };
 private:

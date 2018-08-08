@@ -5,7 +5,7 @@ auto unbind_vertex_layouts(void) -> void
 	glBindVertexArray(0);
 }
 
-auto vertex_layout::create(void) -> uint32_t
+auto vertex_layout::create(void) -> u32
 {
 	count = 0;
 
@@ -23,7 +23,7 @@ auto vertex_layout::bind(void) -> void
 	glBindVertexArray(id);
 }
 
-auto vertex_layout::counter(void) -> uint32_t
+auto vertex_layout::counter(void) -> u32
 {
 	return count;
 }

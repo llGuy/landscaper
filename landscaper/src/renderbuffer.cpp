@@ -1,6 +1,6 @@
 #include "renderbuffer.h"
 
-auto renderbuffer::create(void) -> uint32_t
+auto renderbuffer::create(void) -> u32
 {
 	glGenRenderbuffers(1, &id);
 	return id;
@@ -16,7 +16,7 @@ auto renderbuffer::destroy(void) -> void
 	glDeleteRenderbuffers(1, &id);
 }
 
-auto renderbuffer::set_storage(GLenum component, uint32_t w, uint32_t h) -> void
+auto renderbuffer::set_storage(GLenum component, u32 w, u32 h) -> void
 {
 	glRenderbufferStorage(GL_RENDERBUFFER, component, w, h);
 }

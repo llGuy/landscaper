@@ -1,6 +1,6 @@
 #include "default_stage.h"
 
-auto default_stage::create(int32_t w, int32_t h) -> void
+auto default_stage::create(i32 w, i32 h) -> void
 {
 	this->w = w;
 	this->h = h;
@@ -26,7 +26,7 @@ auto default_stage::render(quad_2D & quad, texture & prev) -> void
 	  class, it will bind to this  */
 }
 
-auto default_stage::create_texture(int32_t w, int32_t h) -> void
+auto default_stage::create_texture(i32 w, i32 h) -> void
 {
 	out.create();
 	out.bind(GL_TEXTURE_2D);
@@ -35,7 +35,7 @@ auto default_stage::create_texture(int32_t w, int32_t h) -> void
 	out.int_param(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 }
 
-auto default_stage::create_depth(int32_t w, int32_t h) -> void
+auto default_stage::create_depth(i32 w, i32 h) -> void
 {
 	depth.create();
 	depth.bind();

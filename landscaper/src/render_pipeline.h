@@ -9,7 +9,7 @@
 #include "glow_final_stage.h"
 
 extern auto render_model(renderable & model, GLenum type) -> void;
-extern auto clear(int32_t flags, float r, float g, float b) -> void;
+extern auto clear(i32 flags, f32 r, f32 g, f32 b) -> void;
 
 struct blur_stage { hblur_stage h; vblur_stage v; };
 
@@ -18,7 +18,7 @@ class render_pipeline
 public:
 	render_pipeline(void);
 
-	auto create(int32_t w, int32_t h, resource_handler & rh) -> void;
+	auto create(i32 w, i32 h, resource_handler & rh) -> void;
 	auto bind_default(void) -> void;
 	auto bind_glow(void) -> void;
 

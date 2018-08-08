@@ -1,7 +1,7 @@
 #include "glow_final_stage.h"
 #include "render_pipeline.h"
 
-auto glow_final_stage::create(int32_t width, int32_t height) -> void
+auto glow_final_stage::create(i32 width, i32 height) -> void
 {
 	this->w = width;
 	this->h = height;
@@ -40,7 +40,7 @@ auto glow_final_stage::render(quad_2D & quad, texture & color, texture & blur) -
 	render_model(quad, GL_TRIANGLE_STRIP);
 }
 
-auto glow_final_stage::create_texture(int32_t w, int32_t h) -> void
+auto glow_final_stage::create_texture(i32 w, i32 h) -> void
 {
 	out.create();
 	out.bind(GL_TEXTURE_2D);
@@ -49,7 +49,7 @@ auto glow_final_stage::create_texture(int32_t w, int32_t h) -> void
 	out.int_param(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 }
 
-auto glow_final_stage::create_depth(int32_t w, int32_t h) -> void
+auto glow_final_stage::create_depth(i32 w, i32 h) -> void
 {
 	depth.create();
 	depth.bind();

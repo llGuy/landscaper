@@ -1,7 +1,7 @@
 #include "application.h"
 #include "scene.h"
 
-application::application(int32_t w, int32_t h)
+application::application(i32 w, i32 h)
 	: appl_window(w, h, "landscaper"), resources("")
 {
 }

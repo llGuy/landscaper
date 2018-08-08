@@ -18,7 +18,7 @@ auto render_model(renderable & model, GLenum type) -> void
 	unbind_vertex_layouts();
 }
 
-auto clear(int32_t flags, float r, float g, float b) -> void
+auto clear(i32 flags, f32 r, f32 g, f32 b) -> void
 {
 	glClear(flags);
 	glClearColor(r, g, b, 1);
@@ -27,11 +27,11 @@ auto clear(int32_t flags, float r, float g, float b) -> void
 
 
 render_pipeline::render_pipeline(void)
-	: blur_stages{ blur_stage{4, 4}, blur_stage{6, 6}, blur_stage{8, 8} }
+	: blur_stages{ blur_stage{4, 6}, blur_stage{8, 10}, blur_stage{12, 16} }
 {
 }
 
-auto render_pipeline::create(int32_t w, int32_t h, resource_handler & rh) -> void
+auto render_pipeline::create(i32 w, i32 h, resource_handler & rh) -> void
 {
 	default_target.create(w, h);
 	glowing_stage.create(w, h);
@@ -84,7 +84,7 @@ auto render_pipeline::carry_blur(void) -> void
 	blur_stages[0].h.render(render_quad, glowing_stage.output());
 	blur_stages[0].v.render(render_quad, blur_stages[0].h.output());
 
-	for (uint32_t i = 1; i < blur_stages.size(); ++i)
+	for (u32 i = 1; i < blur_stages.size(); ++i)
 	{
 		blur_stages[i].h.render(render_quad, blur_stages[i - 1].v.output());
 		blur_stages[i].v.render(render_quad, blur_stages[i].h.output());

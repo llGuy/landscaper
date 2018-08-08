@@ -9,4 +9,5 @@ uniform sampler2D blur_texture;
 void main(void)
 {
 	final_color = texture(color_texture, pass_texture_coords) + texture(blur_texture, pass_texture_coords);
+	//final_color = mix(texture(color_texture, pass_texture_coords), texture(blur_texture, pass_texture_coords), 0.5);
 }

@@ -2,17 +2,13 @@
 #include "render_pipeline.h"
 
 platform_handler::platform_handler(void) 
+	: model(3.0f, glm::vec3(-((float)platform_width) / 2.0f, 0, -((float)platform_depth) / 2.0f))
 {
 }
 
 auto platform_handler::create(resource_handler & rh, glm::mat4 & proj) -> void
 {
-	platforms.emplace_back(3.0f, glm::vec3(-((float)platform_width) / 2.0f, 0, -((float)platform_depth) / 2.0f)); 
-	platforms.back().create(rh);
-	platforms.emplace_back(2.0f, glm::vec3(-((float)platform_width) / 2.0f, 0, -((float)platform_depth) / 2.0f) + glm::vec3(50.0f, 0, -40.0f));
-	platforms.back().create(rh);
-	platforms.emplace_back(5.0f, glm::vec3(-((float)platform_width) / 2.0f, 0, -((float)platform_depth) / 2.0f) + glm::vec3(-35.0f, 0, 30.0f));
-	platforms.back().create(rh);
+	model.create(rh);
 
 	create_realistic_texture("res/textures/grass/grass", grass, rh);
 	create_realistic_texture("res/textures/dirt/dirt", dirt, rh);
@@ -39,16 +35,16 @@ auto platform_handler::prepare(glm::vec3 & camera, glm::vec3 & light_pos, glm::v
 
 auto platform_handler::render(glm::mat4 & view_matrix) -> void
 {
-	for (auto plat : platforms)
-	{
+	//for (auto plat : platforms)
+	//{
 		shaders.use();
 		shaders.uniform_mat4(&view_matrix[0][0], 1);
 
-		auto neg_corner = plat.negative_corner();
+		auto neg_corner = model.negative_corner();
 		shaders.uniform_3f(&neg_corner[0], 2);
 
-		render_model(plat, GL_TRIANGLES);
-	}
+		render_model(model, GL_TRIANGLES);
+//	}
 }
 
 auto platform_handler::create_shaders(glm::mat4 & proj) -> void

@@ -19,7 +19,7 @@ auto sky::create_texture(resource_handler & rh) -> void
 
 	std::array<std::string, 6> files { "right", "left", "up2", "down", "back", "front" };
 
-	for (uint32_t i = 0; i < files.size(); ++i)
+	for (u32 i = 0; i < files.size(); ++i)
 	{
 		auto img = rh.load<image>("res/textures/sky/" + files[i] + ".png");
 		sky_texture.fill(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, GL_RGBA, 

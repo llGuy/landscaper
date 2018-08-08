@@ -18,11 +18,11 @@ namespace detail {
 		return { std::forward<T>(params)... };
 	}
 
-	template <typename T, uint32_t N> auto vec_rand(int32_t max) -> glm::vec<N, T, glm::highp>
+	template <typename T, u32 N> auto vec_rand(i32 max) -> glm::vec<N, T, glm::highp>
 	{
 		using type = glm::vec<N, T, glm::highp>;
 		type result;
-		for (uint32_t i = 0; i < N; ++i) result[i] = static_cast<T>(rand() % max);
+		for (u32 i = 0; i < N; ++i) result[i] = static_cast<T>(rand() % max);
 		return result;
 	}
 

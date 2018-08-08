@@ -1,7 +1,7 @@
 #include "log.h"
 #include "application.h"
 
-auto main(int32_t argc, char * argv[]) -> int32_t
+auto main(i32 argc, char * argv[]) -> i32
 {
 	application app { 1136, 640 };
 	glfw_init();

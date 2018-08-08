@@ -7,13 +7,12 @@
 
 namespace {
 
-	constexpr uint32_t platform_width = 32;
-	constexpr uint32_t platform_depth = 32;
+	constexpr u32 platform_width = 64;
+	constexpr u32 platform_depth = 64;
 
 }
 
 using default_platform_model = platform_model<platform_width, platform_depth>;
-using platform = default_platform_model;
 
 class platform_handler
 {
@@ -30,8 +29,8 @@ private:
 	auto create_shaders(glm::mat4 & proj) -> void;
 	auto create_realistic_texture(std::string const & begin_dir, realistic_texture & tex, resource_handler & rh) -> void;
 private:
-	std::vector<platform> platforms;
-	
+	default_platform_model model;
+
 	realistic_texture grass;
 	realistic_texture dirt;
 

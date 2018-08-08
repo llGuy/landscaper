@@ -12,7 +12,7 @@ auto gui_handler::create(resource_handler & rh) -> void
 	gui_program.get_uniform_locations("model_matrix");
 }
 
-auto gui_handler::push(glm::vec2 const & translation, float scale) -> void
+auto gui_handler::push(glm::vec2 const & translation, f32 scale) -> void
 {
 	glm::vec3 trans3D{ translation.x, translation.y, 0 };
 	guis.emplace_back(glm::translate(trans3D) * glm::scale(glm::vec3(scale)));

@@ -8,16 +8,16 @@ extern auto unbind_vertex_layouts(void) -> void;
 
 struct attribute
 {
-	attribute(uint32_t type, GLenum size, 
-		GLenum normalized, uint32_t stride, void * ptr, bool d)
+	attribute(u32 type, GLenum size, 
+		GLenum normalized, u32 stride, void * ptr, bool d)
 		: t(type), s(size), n(normalized), st(stride), p(ptr), divisor(d)
 	{
 	}
 
-	uint32_t t;
+	u32 t;
 	GLenum s;
 	GLenum n;
-	uint32_t st;
+	u32 st;
 	void * p;
 	bool divisor;
 };
@@ -27,7 +27,7 @@ class vertex_layout
 public:
 	vertex_layout(void) = default;
 
-	auto create(void) -> uint32_t;
+	auto create(void) -> u32;
 	auto destroy(void) -> void;
 	auto bind(void) -> void;
 
@@ -38,7 +38,7 @@ public:
 		int8_t imps[] { ( add_attrib(attribs), static_cast<int8_t>(0) ) ... };
 	}
 
-	auto counter(void) -> uint32_t;
+	auto counter(void) -> u32;
 private:
 	auto add_attrib(attribute a)
 	{
@@ -47,6 +47,6 @@ private:
 		glVertexAttribPointer(count++, a.s, a.t, a.n, a.st, a.p);
 	};
 private:
-	uint32_t count;
-	uint32_t id;
+	u32 count;
+	u32 id;
 };

@@ -1,7 +1,7 @@
 #include "cube.h"
 #include <glm/glm.hpp>
 
-cube::cube(float radius)
+cube::cube(f32 radius)
 	: radius(radius)
 {
 }
@@ -26,7 +26,7 @@ auto cube::create(resource_handler & rh) -> void
 	vertex_buffer.create();
 	vertex_buffer.fill(sizeof(verts), verts, GL_STATIC_DRAW, GL_ARRAY_BUFFER);
 
-	uint16_t indices[]
+	u16 indices[]
 	{
 		// front
 		0, 1, 2,

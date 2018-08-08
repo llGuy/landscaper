@@ -1,5 +1,6 @@
 #pragma once
 
+#include "types.h"
 #include <GL/glew.h>
 #include <iostream>
 
@@ -9,13 +10,13 @@ class renderbuffer
 public:
 	renderbuffer(void) = default;
 
-	auto create(void) -> uint32_t;
+	auto create(void) -> u32;
 	auto bind(void) -> void;
 	auto destroy(void) -> void;
 
-	auto set_storage(GLenum component, uint32_t w, uint32_t h) -> void;
+	auto set_storage(GLenum component, u32 w, u32 h) -> void;
 private:
-	uint32_t id;
+	u32 id;
 };
 
 extern auto create_depth_buffer(renderbuffer & r, int32_t w, int32_t h) -> void;

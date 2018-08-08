@@ -9,11 +9,12 @@
 #include "resources.h"
 #include "input_handler.h"
 #include "timer.h"
+#include "types.h"
 
 class application
 {
 public:
-	application(int32_t w, int32_t h);
+	application(i32 w, i32 h);
 
 	auto init(void) -> void;
 	auto init_window(void) -> void;
@@ -29,5 +30,5 @@ private:
 
 	// debugging
 public:
-	float fps;
+	f32 fps;
 };

@@ -42,7 +42,7 @@ auto shader::delete_shader(void) -> void
 {
 	glDeleteShader(shader_id);
 }
-auto shader::id(void) -> uint32_t
+auto shader::id(void) -> u32
 {
 	return shader_id;
 }

@@ -2,10 +2,10 @@
 #include "detail.h"
 #include <glm/gtx/transform.hpp>
 
-scene::scene(int32_t w, int32_t h, glm::vec2 const & cursor_pos, resource_handler & rh)
+scene::scene(i32 w, i32 h, glm::vec2 const & cursor_pos, resource_handler & rh)
 	: entities(cursor_pos), screen_res{ w, h }
 {
-	auto projection = glm::perspective(glm::radians(60.0f), (float)w / (float)h, 0.1f, 10000.0f);
+	auto projection = glm::perspective(glm::radians(60.0f), (f32)w / (f32)h, 0.1f, 10000.0f);
 
 	sky_box.create(rh, projection);
 	pipeline.create(w, h, rh);
@@ -28,6 +28,7 @@ auto scene::render(timer & time) -> void
 	render_scene(view_matrix, detail::null_vector, time, true);
 
 	pipeline.bind_glow();
+	//render_scene(view_matrix, detail::null_vector, time, true);
 	clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, 0, 0, 0);
 	entities.prepare(view_matrix, detail::null_vector);
 	entities.render();
@@ -72,7 +73,7 @@ auto scene::render_scene(glm::mat4 & view, glm::vec4 & plane, timer & t, bool re
 
 auto scene::update(input_handler & ih, timer & time) -> game_state *
 {
-	entities.update(ih, time.elapsed());
+	entities.update(ih, physics, time.elapsed());
 	ih.cursor_moved() = false;
 
 	return nullptr;

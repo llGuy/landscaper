@@ -11,15 +11,15 @@ class postproc_stage
 public:
 	postproc_stage(void) = default;
 
-	virtual auto create(int32_t w, int32_t h) -> void = 0;
+	virtual auto create(i32 w, i32 h) -> void = 0;
 	virtual auto bind(void) -> void = 0;
 	virtual auto render(quad_2D & quad, texture & prev) -> void {}
 
 	inline auto output(void) -> texture & { return out; };
 	inline auto fbo(void) -> framebuffer & { return main; }
 protected:
-	virtual auto create_texture(int32_t w, int32_t h) -> void {}
-	virtual auto create_depth(int32_t w, int32_t h) -> void {}
+	virtual auto create_texture(i32 w, i32 h) -> void {}
+	virtual auto create_depth(i32 w, i32 h) -> void {}
 protected:
 	framebuffer main;
 	texture out;
@@ -27,5 +27,5 @@ protected:
 
 	program shaders;
 
-	int32_t w, h;
+	i32 w, h;
 };

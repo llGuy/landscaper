@@ -7,6 +7,7 @@
 #include <optional>
 #endif
 #include <GL/glew.h>
+#include "types.h"
 
 class shader
 {
@@ -17,10 +18,10 @@ public:
 	auto compile(std::string const & dir) -> void;
 	auto status(void) -> bool;
 	auto delete_shader(void) -> void;
-	auto id(void)->uint32_t;
+	auto id(void)->u32;
 	auto type(void)->GLenum;
 	auto extract_source(std::string const & dir)->std::optional<std::string>;
 private:
-	uint32_t shader_id;
+	u32 shader_id;
 	GLenum shader_type;
 };

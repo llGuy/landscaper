@@ -19,9 +19,9 @@ auto water_handler::create(resource_handler & rh, glm::mat4 & projection) -> voi
 	get_normal_map(rh);
 }
 
-auto water_handler::prepare(glm::mat4 & view, glm::vec3 & cam_pos, glm::vec3 & light, float elapsed) -> void
+auto water_handler::prepare(glm::mat4 & view, glm::vec3 & cam_pos, glm::vec3 & light, f32 elapsed) -> void
 {
-	static float move_factor = 0;
+	static f32 move_factor = 0;
 	move_factor += elapsed * 0.1f;
 
 	glEnable(GL_BLEND);
@@ -54,7 +54,7 @@ auto water_handler::refl_texture(void)->texture &
 	return refl_color;
 }
 
-auto water_handler::create_reflection_fbo(int32_t w, int32_t h) -> void
+auto water_handler::create_reflection_fbo(i32 w, i32 h) -> void
 {
 	water_reflection_fbo.create(w, h);
 	water_reflection_fbo.bind();
@@ -63,19 +63,19 @@ auto water_handler::create_reflection_fbo(int32_t w, int32_t h) -> void
 	create_depth_buffer_attachment(refl_depth, water_reflection_fbo, w, h);
 }
 
-auto water_handler::create_color_texture_attachment(texture & t, framebuffer & f, int32_t w, int32_t h) -> void
+auto water_handler::create_color_texture_attachment(texture & t, framebuffer & f, i32 w, i32 h) -> void
 {
 	create_color_texture(t, w, h, nullptr);
 	f.attach(t, GL_COLOR_ATTACHMENT0, 0);
 }
 
-auto water_handler::create_depth_buffer_attachment(renderbuffer & r, framebuffer & f, int32_t w, int32_t h) -> void
+auto water_handler::create_depth_buffer_attachment(renderbuffer & r, framebuffer & f, i32 w, i32 h) -> void
 {
 	create_depth_buffer(r, w, h);
 	f.attach(r, GL_DEPTH_ATTACHMENT);
 }
 
-auto water_handler:: create_depth_texture_attachment(texture & t, framebuffer & fbo, int32_t w, int32_t h) -> void
+auto water_handler:: create_depth_texture_attachment(texture & t, framebuffer & fbo, i32 w, i32 h) -> void
 {
 	create_depth_texture(t, w, h);
 	fbo.attach(t, GL_DEPTH_ATTACHMENT, 0);

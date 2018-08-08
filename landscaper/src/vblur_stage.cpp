@@ -1,12 +1,12 @@
 #include "vblur_stage.h"
 #include "render_pipeline.h"
 
-vblur_stage::vblur_stage(int32_t s)
+vblur_stage::vblur_stage(i32 s)
 	: scale(s)
 {
 }
 
-auto vblur_stage::create(int32_t width, int32_t height) -> void
+auto vblur_stage::create(i32 width, i32 height) -> void
 {
 	this->w = width / scale;
 	this->h = height / scale;
@@ -25,7 +25,7 @@ auto vblur_stage::create(int32_t width, int32_t height) -> void
 	shaders.link_shaders("vertex_position", "texture_coords");
 	shaders.get_uniform_locations("target_height");
 	shaders.use();
-	shaders.uniform_1f(static_cast<float>(height), 0);
+	shaders.uniform_1f(static_cast<f32>(height), 0);
 }
 
 auto vblur_stage::bind(void) -> void
@@ -43,7 +43,7 @@ auto vblur_stage::render(quad_2D & quad, texture & prev) -> void
 	render_model(quad, GL_TRIANGLE_STRIP);
 }
 
-auto vblur_stage::create_texture(int32_t w, int32_t h) -> void
+auto vblur_stage::create_texture(i32 w, i32 h) -> void
 {
 	out.create();
 	out.bind(GL_TEXTURE_2D);
@@ -52,7 +52,7 @@ auto vblur_stage::create_texture(int32_t w, int32_t h) -> void
 	out.int_param(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 }
 
-auto vblur_stage::create_depth(int32_t w, int32_t h) -> void
+auto vblur_stage::create_depth(i32 w, i32 h) -> void
 {
 	depth.create();
 	depth.bind();

@@ -10,7 +10,7 @@ public:
 	virtual auto create(resource_handler & rh) -> void override;
 	auto destroy(void) -> void override;
 
-	inline auto count(void) -> uint32_t override { return 4; };
+	inline auto count(void) -> u32 override { return 4; };
 	inline auto index_type(void) -> GLenum override { return 0; };
 	inline auto index_ptr(void) -> void * override { return nullptr; }
 	inline auto indexed(void) -> bool override { return false; };

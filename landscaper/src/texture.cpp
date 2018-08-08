@@ -31,7 +31,7 @@ auto texture::create(void) -> void
 {
 	glGenTextures(1, &id);
 }
-auto texture::bind(GLenum target, uint32_t slot) -> void
+auto texture::bind(GLenum target, u32 slot) -> void
 {
 	if (slot == -1)
 	{
@@ -45,7 +45,7 @@ auto texture::fill(GLenum target, GLenum internal_format, GLenum format, GLenum 
 {
 	glTexImage2D(target, 0, internal_format, w, h, 0, format, type, data);
 }
-auto texture::float_param(GLenum target, GLenum mode, float factor) -> void
+auto texture::float_param(GLenum target, GLenum mode, f32 factor) -> void
 {
 	glTexParameterf(target, mode, factor);
 }

@@ -6,6 +6,7 @@
 #include <vector>
 #include <array>
 #include "shader.h"
+#include "types.h"
 
 class program
 {
@@ -36,7 +37,7 @@ public:
 		std::array<char const *, sizeof...(locs)> names{ locs... };
 		std::for_each(names.begin(), names.end(), [&](char const * name)
 		{
-			uint32_t location = glGetUniformLocation(program_id, name);
+			u32 location = glGetUniformLocation(program_id, name);
 			uniform_locations.push_back(location);
 		});
 	}
@@ -48,17 +49,17 @@ private:
 	template <typename ... T> auto bind_attribs(T ... attribs) -> void
 	{
 		std::array<char const *, sizeof...(attribs)> atts{ attribs... };
-		for (uint32_t i = 0; i < sizeof...(attribs); ++i) glBindAttribLocation(program_id, i, atts[i]);
+		for (u32 i = 0; i < sizeof...(attribs); ++i) glBindAttribLocation(program_id, i, atts[i]);
 	}
 public:
-	auto uniform_1f(float p, uint32_t index) -> void;
-	auto uniform_2f(float* p, uint32_t index) -> void;
-	auto uniform_3f(float* p, uint32_t index) -> void;
-	auto uniform_mat4(float* p, uint32_t index) -> void;
-	auto uniform_1i(int32_t i, uint32_t index) -> void;
-	auto uniform_4f(float * p, uint32_t index) -> void;
+	auto uniform_1f(f32 p, u32 index) -> void;
+	auto uniform_2f(f32* p, u32 index) -> void;
+	auto uniform_3f(f32* p, u32 index) -> void;
+	auto uniform_mat4(f32* p, u32 index) -> void;
+	auto uniform_1i(i32 i, u32 index) -> void;
+	auto uniform_4f(f32 * p, u32 index) -> void;
 private:
 	std::vector<shader> shaders;
-	std::vector<uint32_t> uniform_locations;
-	uint32_t program_id;
+	std::vector<u32> uniform_locations;
+	u32 program_id;
 };

@@ -10,6 +10,7 @@
 #include "platform_handler.h"
 #include "resolution.h"
 #include "lighting.h"
+#include "physics.h"
 #include "water.h"
 #include "sky.h"
 #include "gui.h"
@@ -17,7 +18,7 @@
 class scene : public game_state
 {
 public:
-	scene(int32_t w, int32_t h, glm::vec2 const & cursor_pos, resource_handler & rh);
+	scene(i32 w, i32 h, glm::vec2 const & cursor_pos, resource_handler & rh);
 
 	auto render(timer & time) -> void override;
 	auto update(input_handler & ih, timer & time) -> game_state * override;
@@ -38,6 +39,7 @@ private:
 	water_handler water;
 	entity_handler entities;
 	platform_handler platforms;
+	physics_handler physics;
 
-	float previous_elapsed_time;
+	f32 previous_elapsed_time;
 };

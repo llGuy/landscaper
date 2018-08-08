@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <GL/glew.h>
+#include "types.h"
 
 class texture
 {
@@ -10,15 +11,15 @@ public:
 
 	virtual auto create(void) -> void;
 
-	auto bind(GLenum target, uint32_t slot = -1) -> void;
+	auto bind(GLenum target, u32 slot = -1) -> void;
 	auto fill(GLenum target, GLenum internal_format, 
 		GLenum format, GLenum type, void const * data, int32_t w, int32_t h) -> void;
 
 	auto enable_mipmap(GLenum target) -> void;
-	auto float_param(GLenum target, GLenum mode, float factor) -> void;
+	auto float_param(GLenum target, GLenum mode, f32 factor) -> void;
 	auto int_param(GLenum target, GLenum mode, GLenum factor) -> void;
 protected:
-	uint32_t id;
+	u32 id;
 
 	int32_t w, h;
 };

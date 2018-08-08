@@ -4,15 +4,15 @@
 
 auto look_fps(glm::vec2 const & cursor_dif, 
 	glm::vec3 const & direction, 
-	float elapsed, 
-	float sensitivity) -> glm::vec3
+	f32 elapsed, 
+	f32 sensitivity) -> glm::vec3
 {
 	using detail::up;
 
 	glm::vec3 res = direction;
 
-	float x_angle = glm::radians(-cursor_dif.x) * sensitivity;// *elapsed;
-	float y_angle = glm::radians(-cursor_dif.y) * sensitivity;// *elapsed;
+	f32 x_angle = glm::radians(-cursor_dif.x) * sensitivity;// *elapsed;
+	f32 y_angle = glm::radians(-cursor_dif.y) * sensitivity;// *elapsed;
 	res = glm::mat3(glm::rotate(x_angle, up)) * res;
 	glm::vec3 rotate_y = glm::cross(res, up);
 	res = glm::mat3(glm::rotate(y_angle, rotate_y)) * res;
@@ -22,16 +22,16 @@ auto look_fps(glm::vec2 const & cursor_dif,
 
 camera::camera(glm::vec2 const & cursor_xy)
 	: bound_entity(-1), cursor_ref(cursor_xy),
-	  camera_view_matrix(1), entity::entity(glm::vec3(-1, 6, 1), glm::vec3(1, 0.1, 0.01), 1)
+	camera_view_matrix(1), entity::entity{ glm::vec3(-1, 6, 1), glm::vec3(1, 0.1, 0.01), glm::vec3 (0), 1.0f }
 {
 }
 
-auto camera::bind(int32_t entity) -> void
+auto camera::bind(i32 entity) -> void
 {
 	bound_entity = entity;
 }
 
-auto camera::look_at(glm::vec2 const & cursor, float elapsed, float sensitivity) -> void
+auto camera::look_at(glm::vec2 const & cursor, f32 elapsed, f32 sensitivity) -> void
 {
 	using detail::up;
 
