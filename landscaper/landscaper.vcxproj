@@ -52,7 +52,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application.h" />
-    <ClInclude Include="src\component.h" />
+    <ClInclude Include="src\component\component.h" />
+    <ClInclude Include="src\component\key_control.h" />
+    <ClInclude Include="src\component\mouse_control.h" />
+    <ClInclude Include="src\component\physics.h" />
     <ClInclude Include="src\glow_final_stage.h" />
     <ClInclude Include="src\glow_stage.h" />
     <ClInclude Include="src\buffer.h" />

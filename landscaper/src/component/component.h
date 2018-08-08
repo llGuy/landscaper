@@ -1,12 +1,10 @@
 #pragma once
 
 #include <array>
-#include "types.h"
-
-/* component types */
-struct camera;
+#include "../types.h"
 
 struct comp_base { virtual auto update(void) -> void = 0; };
+
 template <typename T> struct component : comp_base
 {
 	T value; u32 id;
@@ -14,8 +12,14 @@ template <typename T> struct component : comp_base
 	auto update(void) -> void override {  };
 };
 
+struct entity 
+{ 
+	static constexpr u32 max_components = 10;
 
-struct entity { u32 id; };
+	comp_base * components[max_components];
+	u32 comp_count;
+	u32 id; 
+};
 
 template <typename T, u32 M> class system
 {
@@ -37,5 +41,9 @@ template <typename C, typename S> auto add_component(C && comp, S && sys, entity
 {
 	sys.back() = comp;
 	sys.back().id = ent.id;
+
+	if (ent.comp_count < entity::max_components)
+		ent.components[ent.comp_count++] = &sys.back();
+
 	++sys;
 }
