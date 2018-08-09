@@ -1,6 +1,6 @@
 #pragma once
 
-#include "entity.h"
+//#include "entity.h"
 #include "types.h"
 
 #include <glm/glm.hpp>
@@ -25,6 +25,9 @@ private:
 	i32 bound_entity;
 	glm::vec2 cursor_ref;
 	glm::mat4 camera_view_matrix;
+
+	glm::vec3 position;
+	glm::vec3 direction;
 };
 
 /*template <> struct component <camera> : comp_base

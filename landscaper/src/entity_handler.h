@@ -6,6 +6,10 @@
 #include "input_handler.h"
 #include "physics.h"
 
+// testing component system
+#include "component/component.h"
+#include "component/key_control.h"
+
 using entity_model = cube;
 
 class entity_handler
@@ -26,4 +30,7 @@ private:
 	camera cam;
 	program shaders;
 	entity_model model;
+
+	entity player;
+	system<key_control, 1> key_system;
 };

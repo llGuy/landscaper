@@ -18,7 +18,7 @@
 class scene : public game_state
 {
 public:
-	scene(i32 w, i32 h, glm::vec2 const & cursor_pos, resource_handler & rh);
+	scene(i32 w, i32 h, glm::vec2 const & cursor_pos, resource_handler & rh, input_handler & ih);
 
 	auto render(timer & time) -> void override;
 	auto update(input_handler & ih, timer & time) -> game_state * override;

@@ -11,7 +11,7 @@ auto application::init(void) -> void
 	state = std::make_unique<scene>(appl_window.pixel_width(), 
 		                            appl_window.pixel_height(),
 		                            appl_window.cursor_position(),
-		                            resources);
+		                            resources, appl_window.user_inputs());
 	time.start();
 }
 

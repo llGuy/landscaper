@@ -2,7 +2,7 @@
 #include "detail.h"
 #include <glm/gtx/transform.hpp>
 
-scene::scene(i32 w, i32 h, glm::vec2 const & cursor_pos, resource_handler & rh)
+scene::scene(i32 w, i32 h, glm::vec2 const & cursor_pos, resource_handler & rh, input_handler & ih)
 	: entities(cursor_pos), screen_res{ w, h }
 {
 	auto projection = glm::perspective(glm::radians(60.0f), (f32)w / (f32)h, 0.1f, 10000.0f);
@@ -12,7 +12,7 @@ scene::scene(i32 w, i32 h, glm::vec2 const & cursor_pos, resource_handler & rh)
 	platforms.create(rh, projection);
 	water.create(rh, projection);
 	guis.create(rh);
-	entities.create(projection, rh);
+	entities.create(projection, rh, ih);
 
 	guis.push(glm::vec2{ -0.5f, +0.5f }, 0.4f);
 

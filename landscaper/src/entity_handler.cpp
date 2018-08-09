@@ -27,6 +27,9 @@ auto entity_handler::create(glm::mat4 & projection, resource_handler & rh) -> vo
 {
 	model.create(rh);
 	create_shaders(projection);
+
+	// initialize component system
+	add_component(component<key_control>(), key_system, player);
 }
 
 auto entity_handler::create_shaders(glm::mat4 & projection) -> void
