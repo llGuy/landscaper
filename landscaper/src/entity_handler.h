@@ -1,23 +1,25 @@
 #pragma once
 
 #include "program.h"
-#include "camera.h"
+//#include "camera.h"
 #include "cube.h"
 #include "input_handler.h"
 #include "physics.h"
 
 // testing component system
+#include "component/graphics.h"
 #include "component/component.h"
 #include "component/key_control.h"
+#include "component/mouse_control.h"
 
 using entity_model = cube;
 
 class entity_handler
 {
 public:
-	entity_handler(glm::vec2 const & cur);
+	entity_handler(void);
 
-	auto create(glm::mat4 & projection, resource_handler & rh) -> void;
+	auto create(glm::mat4 & projection, resource_handler & rh, input_handler & ih) -> void;
 	auto prepare(glm::mat4 & view, glm::vec4 & plane) -> void;
 	auto render(void) -> void;
 
@@ -26,11 +28,20 @@ public:
 	inline auto entity_cam(void) -> camera & { return cam; };
 private:
 	auto create_shaders(glm::mat4 & projection) -> void;
+
 private:
-	camera cam;
+	// component stuff
+	auto create_local(input_handler & ih, entity & user) -> void;
+	auto create_remote(void) -> entity;
+	auto init_player(entity & ent) -> void;
+private:
 	program shaders;
 	entity_model model;
 
 	entity player;
-	system<key_control, 1> key_system;
+	camera cam;
+
+	comp_system<key_control, 1> key_system;
+	comp_system<mouse_control, 1> mouse_system;
+	comp_system<graphics, 5> graphics_system;
 };

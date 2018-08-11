@@ -2,8 +2,10 @@
 #include "detail.h"
 #include <glm/gtx/transform.hpp>
 
+#define VIEW_TEST glm::lookAt(glm::vec3(0, 10, 0), glm::vec3(0, 10, 0) + glm::vec3(1.0f, 0.01f, 0.01f), detail::up)
+
 scene::scene(i32 w, i32 h, glm::vec2 const & cursor_pos, resource_handler & rh, input_handler & ih)
-	: entities(cursor_pos), screen_res{ w, h }
+	: screen_res{ w, h }
 {
 	auto projection = glm::perspective(glm::radians(60.0f), (f32)w / (f32)h, 0.1f, 10000.0f);
 
@@ -24,11 +26,10 @@ auto scene::render(timer & time) -> void
 	prepare_water_renderer(time);
 
 	pipeline.bind_default();
-	auto view_matrix = entities.entity_cam().view_matrix();
+	auto view_matrix = entities.entity_cam().matrix();
 	render_scene(view_matrix, detail::null_vector, time, true);
 
 	pipeline.bind_glow();
-	//render_scene(view_matrix, detail::null_vector, time, true);
 	clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, 0, 0, 0);
 	entities.prepare(view_matrix, detail::null_vector);
 	entities.render();

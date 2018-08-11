@@ -2,7 +2,7 @@
 #include "detail.h"
 
 input_handler::input_handler(void)
-	: key_map{ 0 }, mouse_button_map{ 0 }, window_resized(0), mouse_moved(false)
+	: key_map{ 0 }, mouse_button_map{ 0 }, window_resized(0), mouse_moved(false), current_cursor_position(0)
 {
 }
 

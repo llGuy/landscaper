@@ -6,9 +6,9 @@ physics_handler::physics_handler(void)
 {
 }
 
-auto physics_handler::move(entity & ent, action a, f32 td) -> void
-{
-	using detail::up;
+//auto physics_handler::move(entity & ent, action a, f32 td) -> void
+//{
+	/*using detail::up;
 
 	ent.momentum = glm::vec3(0.0f);
 	glm::vec3 lateral_dir = { ent.direction.x, 0, ent.direction.z };
@@ -25,5 +25,5 @@ auto physics_handler::move(entity & ent, action a, f32 td) -> void
 	case action::right: { ent.momentum = glm::normalize(glm::cross(lateral_dir, up)); break; }
 	}
 
-	ent.position += ent.momentum * ent.speed * 20.0f * td;
-}
+	ent.position += ent.momentum * ent.speed * 20.0f * td;*/
+//}

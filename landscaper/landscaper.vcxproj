@@ -53,6 +53,7 @@
   <ItemGroup>
     <ClInclude Include="src\application.h" />
     <ClInclude Include="src\component\component.h" />
+    <ClInclude Include="src\component\graphics.h" />
     <ClInclude Include="src\component\key_control.h" />
     <ClInclude Include="src\component\mouse_control.h" />
     <ClInclude Include="src\component\physics.h" />
@@ -63,7 +64,6 @@
     <ClInclude Include="src\cube.h" />
     <ClInclude Include="src\default_stage.h" />
     <ClInclude Include="src\detail.h" />
-    <ClInclude Include="src\entity.h" />
     <ClInclude Include="src\entity_handler.h" />
     <ClInclude Include="src\framebuffer.h" />
     <ClInclude Include="src\game_state.h" />
