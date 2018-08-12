@@ -29,7 +29,7 @@ template <> struct component <key_control> : comp_base
 		if (inputs->got_key(GLFW_KEY_SPACE))
 		{
 			bound->pos += up * td;
-			bound->vel.y = 10.0f;
+			bound->vel.y = 12.0f;
 		}
 	};
 };

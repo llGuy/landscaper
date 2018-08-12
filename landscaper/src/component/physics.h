@@ -9,7 +9,7 @@
 struct physics;
 template <> struct component <physics> : comp_base
 {
-	static constexpr f32 gravity_at_sea = -15.5f;
+	static constexpr f32 gravity_at_sea = -30.5f;
 
 	f32 ground_height;
 	platform_handler * platforms;
