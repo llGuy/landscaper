@@ -10,10 +10,12 @@ entity_handler::entity_handler(void)
 
 auto entity_handler::update(input_handler & ih, physics_handler & ph, f32 elapsed) -> void
 {
-//	player.update(elapsed);
-//	for (u32 i = 1; i < entity::max_components; ++i)
-//		if(player.components[i])
-//			player.components[i]->update(elapsed);
+	if (ih.got_key(GLFW_KEY_F1))
+	{
+		bound_entity = (bound_entity + 1) % num_entities;
+		cam.bind_entity(players[bound_entity]);
+	}
+
 	key_system.update(0, elapsed);
 	mouse_system.update(0, elapsed);
 	display_system.update(0, elapsed);
@@ -29,9 +31,8 @@ auto entity_handler::create(glm::mat4 & projection, resource_handler & rh, input
 	create_main(ih, players[0]);
 	create_local(ih, players[1]);
 
-//	add_component<logging>(logging_system, players[1]);
-
-	cam.bind_entity(players[0]);
+	bound_entity = 0;
+	cam.bind_entity(players[bound_entity]);
 }
 
 auto entity_handler::create_shaders(glm::mat4 & projection) -> void
@@ -63,7 +64,7 @@ auto entity_handler::render(bool is_main_target) -> void
 			if (!is_main_target) c1->update(td);
 		}
 		else c1->update(td);
-	}, &players[0], is_main_target, 0.0f);
+	}, &players[bound_entity], is_main_target, 0.0f);
 }
 
 auto entity_handler::create_main(input_handler & ih, entity & user) -> void
@@ -71,6 +72,7 @@ auto entity_handler::create_main(input_handler & ih, entity & user) -> void
 	add_component<graphics>(graphics_system, user, model, shaders);
 	add_component<key_control>(key_system, user, ih);
 	add_component<mouse_control>(mouse_system, user, ih);
+
 	init_player(user);
 }
 

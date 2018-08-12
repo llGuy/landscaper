@@ -38,11 +38,14 @@ private:
 	auto create_remote(void) -> entity;
 	auto init_player(entity & ent) -> void;
 private:
+	static constexpr u32 num_entities = 2;
+
 	program shaders;
 	entity_model model;
 
-	std::array<entity, 2> players;
+	std::array<entity, num_entities> players;
 	camera cam;
+	u32 bound_entity;
 
 	comp_system<key_control, 5> key_system;
 	comp_system<mouse_control, 5> mouse_system;
