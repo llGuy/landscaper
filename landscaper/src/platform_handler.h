@@ -1,18 +1,10 @@
 #pragma once
 
-#include "quad_3D.h"
 #include "platform_model.h"
+#include "platform.h"
+#include "quad_3D.h"
 #include "program.h"
 #include <vector>
-
-namespace {
-
-	constexpr u32 platform_width = 64;
-	constexpr u32 platform_depth = 64;
-
-}
-
-using default_platform_model = platform_model<platform_width, platform_depth>;
 
 class platform_handler 
 {
@@ -30,6 +22,7 @@ private:
 	auto create_realistic_texture(std::string const & begin_dir, realistic_texture & tex, resource_handler & rh) -> void;
 private:
 	default_platform_model model;
+	default_platform platform1;
 
 	realistic_texture grass;
 	realistic_texture dirt;

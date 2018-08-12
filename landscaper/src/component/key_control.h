@@ -4,7 +4,7 @@
 #include "component.h"
 #include "../input_handler.h"
 
-struct key_control {};
+struct key_control;
 template <> struct component <key_control> : comp_base
 {
 	// pointer to input handler 

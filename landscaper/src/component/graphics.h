@@ -7,7 +7,7 @@
 #include "../detail.h"
 #include "component.h"
 
-struct graphics {};
+struct graphics;
 template <> struct component <graphics> : comp_base 
 {
 	entity const * bound;

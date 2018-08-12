@@ -30,6 +30,7 @@ public:
 	auto create(void) -> u32;
 	auto destroy(void) -> void;
 	auto bind(void) -> void;
+	auto in_plane_attrib(buffer & buff, u32 i, attribute att) -> void;
 
 	template <typename ... T> auto attach(buffer & buff, T ... attribs) -> void
 	{
@@ -40,7 +41,7 @@ public:
 
 	auto counter(void) -> u32;
 private:
-	auto add_attrib(attribute a)
+	auto add_attrib(attribute a) -> void
 	{
 		glEnableVertexAttribArray(count);
 		if (a.divisor) glVertexAttribDivisor(count, 1);

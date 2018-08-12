@@ -5,14 +5,14 @@
 #include "component.h"
 #include "../input_handler.h"
 
-struct mouse_control {};
+struct mouse_control;
 template <> struct component <mouse_control> : comp_base
 {
 	// pointer to input handler 
 	input_handler * mouse;
 	glm::vec2 previous_cursor;
 	entity * bound;
-	component(input_handler & ih) : mouse(&ih), previous_cursor(-0xFF, -0xFF)
+	component(input_handler & ih) : mouse(&ih), previous_cursor(-0xFF)
 	{
 	}
 	component(void) = default;

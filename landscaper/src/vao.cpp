@@ -27,3 +27,11 @@ auto vertex_layout::counter(void) -> u32
 {
 	return count;
 }
+
+auto vertex_layout::in_plane_attrib(buffer & buff, u32 i, attribute att) -> void
+{
+	buff.bind(GL_ARRAY_BUFFER);
+
+	glEnableVertexAttribArray(i);
+	glVertexAttribPointer(i, att.s, att.t, att.n, att.st, att.p);
+}

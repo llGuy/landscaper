@@ -18,6 +18,6 @@ template <> struct component <physics> : comp_base
 	auto operator=(component &)->component & = default;
 	auto update(f32) -> void override 
 	{
-		// need to get ground height
+		/* need to get ground height */
 	}
 };

@@ -5,7 +5,7 @@
 #include "component.h"
 #include "../detail.h"
 
-struct logging {};
+struct logging;
 template <> struct component <logging> : comp_base
 {
 	u32 count { 0 };

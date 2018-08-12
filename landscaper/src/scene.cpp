@@ -14,7 +14,7 @@ scene::scene(i32 w, i32 h, glm::vec2 const & cursor_pos, resource_handler & rh, 
 	platforms.create(rh, projection);
 	water.create(rh, projection);
 	guis.create(rh);
-	entities.create(projection, rh, ih);
+	entities.create(projection, rh, ih, platforms);
 
 	guis.push(glm::vec2{ -0.5f, +0.5f }, 0.4f);
 
@@ -82,4 +82,7 @@ auto scene::update(input_handler & ih, timer & time) -> game_state *
 
 auto scene::render_debugging(void) -> void
 {
+	guis.prepare(DEBUG_0);
+	water.refl_texture().bind(GL_TEXTURE_2D, 0);
+	guis.render();
 }

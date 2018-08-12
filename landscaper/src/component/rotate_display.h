@@ -3,8 +3,7 @@
 #include <glm/gtx/transform.hpp>
 #include "component.h"
 
-struct rotation_display {};
-
+struct rotation_display;
 template <> struct component <rotation_display> : comp_base
 {
 	entity * bound;

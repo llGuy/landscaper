@@ -2,13 +2,15 @@
 #include "render_pipeline.h"
 
 platform_handler::platform_handler(void) 
-	: model(3.0f, glm::vec3(-((float)platform_width) / 2.0f, 0, -((float)platform_depth) / 2.0f))
+	: model(glm::vec3(-((float)platform_width) / 2.0f, 0, -((float)platform_depth) / 2.0f))
 {
 }
 
 auto platform_handler::create(resource_handler & rh, glm::mat4 & proj) -> void
 {
 	model.create(rh);
+	platform1.create(3.0f);
+
 
 	create_realistic_texture("res/textures/grass/grass", grass, rh);
 	create_realistic_texture("res/textures/dirt/dirt", dirt, rh);
@@ -18,7 +20,7 @@ auto platform_handler::create(resource_handler & rh, glm::mat4 & proj) -> void
 
 auto platform_handler::prepare(glm::vec3 & camera, glm::vec3 & light_pos, glm::vec4 & clip_plane) -> void 
 {
-	// implement batch rendering system
+	/* implement batch rendering system */
 	shaders.use();
 
 	shaders.uniform_1f(32.0f, 3);
@@ -35,16 +37,15 @@ auto platform_handler::prepare(glm::vec3 & camera, glm::vec3 & light_pos, glm::v
 
 auto platform_handler::render(glm::mat4 & view_matrix) -> void
 {
-	//for (auto plat : platforms)
-	//{
-		shaders.use();
-		shaders.uniform_mat4(&view_matrix[0][0], 1);
+	shaders.use();
+	shaders.uniform_mat4(&view_matrix[0][0], 1);
 
-		auto neg_corner = model.negative_corner();
-		shaders.uniform_3f(&neg_corner[0], 2);
+	auto neg_corner = model.negative_corner();
+	shaders.uniform_3f(&neg_corner[0], 2);
 
-		render_model(model, GL_TRIANGLES);
-//	}
+	model.attach_platform_instance(platform1);
+
+	render_model(model, GL_TRIANGLES);
 }
 
 auto platform_handler::create_shaders(glm::mat4 & proj) -> void
@@ -52,7 +53,7 @@ auto platform_handler::create_shaders(glm::mat4 & proj) -> void
 	shaders.create_shader(GL_VERTEX_SHADER, "shaders/platform/vsh.shader");
 	shaders.create_shader(GL_GEOMETRY_SHADER, "shaders/platform/gsh.shader");
 	shaders.create_shader(GL_FRAGMENT_SHADER, "shaders/platform/fsh.shader");
-	shaders.link_shaders("vertex_position", "texture_coords");
+	shaders.link_shaders("vertex_position", "texture_coords", "height");
 	shaders.get_uniform_locations("projection_matrix", "view_matrix", "neg_corner", 
 		"dimension", "camera_position", "light_position", "clip_plane",
 		"grass_texture", "grass_normals", "dirt_texture", "dirt_normals");

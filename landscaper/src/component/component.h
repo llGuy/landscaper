@@ -14,11 +14,9 @@ struct entity
 	static constexpr u32 max_components = 5;
 
 	std::array<comp_base *, max_components> components{ 0 };
-
 	pos_3D pos;
 	dir_3D dir;
 	dir_3D vel;
-
 	u32 comp_count;
 	u32 id;
 };
@@ -48,7 +46,7 @@ public:
 		}
 	}
 
-	// callable must take a pointer to component
+	/* callable must take a pointer to component */
 	template <typename C, typename ... T> auto update(f32 td, C && callable, T && ... params) -> void
 	{
 		for (u32 i = 0; i < counter; ++i)
@@ -57,12 +55,12 @@ public:
 		}
 	}
 
-	// returns back of the list of components
+	/* returns back of the list of components */
 	auto back(void) -> component<T> & 
 	{
 		return list[counter]; 
 	}
-	// simulates array::operator[]
+	/* simulates array::operator[] */
 	auto operator[](u32 i) -> component<T> & 
 	{ 
 		return list[i]; 
@@ -87,7 +85,7 @@ template <typename C, typename S, typename ... Ps> auto add_component(S && sys, 
 	++(sys.count());
 }
 
-// compile time
+/* compile time component systems tests */
 template <typename ... T> struct const_entity 
 {
 	std::tuple <component<T>...> components;

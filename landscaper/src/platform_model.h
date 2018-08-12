@@ -4,20 +4,30 @@
 #include <array>
 
 #include "buffer.h"
+#include "platform.h"
 #include "renderable.h"
 
-// platform model with texture coords :
-// model includes mesh on top and sides
+namespace {
+
+	constexpr u32 platform_width = 64;
+	constexpr u32 platform_depth = 64;
+
+}
+
+using default_platform = platform<platform_width, platform_depth>;
+
+/* platform model with texture coords : 
+ model includes mesh on top and sides */
 template<u32 Width, u32 Depth> class platform_model : public renderable
 {
 private:
-	struct mesh_vertex { glm::vec3 position; glm::vec2 texture_coords; };
+	struct mesh_vertex { glm::vec2 position; glm::vec2 texture_coords; };
 
 	static constexpr u32 verts_x = Width;
 	static constexpr u32 verts_z = Depth;
 public:
-	platform_model(f32 height, glm::vec3 const & neg_corner)
-		: height(height), neg_corner(neg_corner)
+	platform_model(glm::vec3 const & neg_corner)
+		: height(3.0f), neg_corner(neg_corner)
 	{
 	}
 	auto create(resource_handler & rh) -> void override
@@ -32,6 +42,14 @@ public:
 	}
 
 	auto element_buffer(void) -> std::optional<buffer *> override { return &index_buffer; };
+
+	auto attach_platform_instance(default_platform & platform_in) -> void
+	{
+		attribute height_attribute{ GL_FLOAT, 1, GL_FALSE, sizeof(f32), nullptr, false };
+
+		layout.bind();
+		layout.in_plane_attrib(platform_in.heights_buffer(), 2, height_attribute);
+	}
 public:
 	auto indexed(void) -> bool override { return true; };
 	auto count(void) -> u32 override { return (Width - 1) * (Depth - 1) * 6 + (6 * 4); };
@@ -63,7 +81,7 @@ private:
 
 				u32 index = index_mesh_space(x, z);
 
-				vertices[index].position = glm::vec3(x_world, height, z_world);
+				vertices[index].position = glm::vec2(x_world, z_world);
 				vertices[index].texture_coords = glm::vec2((f32)x / (f32)(Width), (f32)z / (f32)(Depth));
 			}
 		}
@@ -73,33 +91,41 @@ private:
 	}
 	auto create_sides_vertices(void) -> void
 	{
-		enum side { x = 2, z = 0 };
+		enum side { x = 1, z = 0 };
 
 		u32 index = Width * Depth;
 
-		// create x-facing side
-		glm::vec3 left ( neg_corner.x, height, neg_corner.z + (f32)(Depth / 2.0f));
-		glm::vec3 right ( neg_corner.x + (f32)(Width) - 1, height, neg_corner.z + (f32)(Depth / 2.0f) );
-		// create z-facing side
-		glm::vec3 back ( neg_corner.x + (f32)(Width / 2.0f), height, neg_corner.z );
-		glm::vec3 front ( neg_corner.x + (f32)(Width / 2.0f), height, neg_corner.z + (f32)(Depth) - 1 );
+		/*
+		
+		on each side (starting at index 0)
+		0 is at the height, 1 is under the water
+		2 is at the height, 3, is under the water
+		
+		*/
 
-		auto create_side = [this] (u32 & i, glm::vec3 & a, glm::vec3 & b, side s, f32 half) -> void
-		{  
-			glm::vec3 offset{ 0 }; offset[s] = half;
-			// at height level
+		/* create x-facing side */
+		glm::vec2 left ( neg_corner.x, neg_corner.z + (f32)(Depth / 2.0f));
+		glm::vec2 right ( neg_corner.x + (f32)(Width) - 1, neg_corner.z + (f32)(Depth / 2.0f) );
+		/* create z-facing side */
+		glm::vec2 back ( neg_corner.x + (f32)(Width / 2.0f), neg_corner.z );
+		glm::vec2 front ( neg_corner.x + (f32)(Width / 2.0f), neg_corner.z + (f32)(Depth) - 1 );
+
+		auto create_side = [this] (u32 & i, glm::vec2 & a, glm::vec2 & b, side s, f32 half) -> void
+		{
+			glm::vec2 offset{ 0 }; offset[s] = half;
+			/* at height level */
 			vertices[i].position = a + offset; 
 			vertices[i].texture_coords = glm::vec2 { 0, 0 };
 			++i;
-			(vertices[i].position = a + offset).y -= (height + 2.0f);
-			vertices[i].texture_coords = glm::vec2 { 0, (height + 2.0f) / (f32)(Width) };
+			vertices[i].position = a + offset;
+			vertices[i].texture_coords = glm::vec2 { 0, (3.0f) / (f32)(Width) };
 			++i;
 
 			vertices[i].position = b + offset;
 			vertices[i].texture_coords = glm::vec2{ 1, 0 };
 			++i;
-			(vertices[i].position = b + offset).y -= (height + 2.0f);
-			vertices[i].texture_coords = glm::vec2{ 1, (height + 2.0f) / (f32)(Width) };
+			vertices[i].position = b + offset;
+			vertices[i].texture_coords = glm::vec2{ 1, (3.0f) / (f32)(Width) };
 			++i;
 		};
 
@@ -147,12 +173,14 @@ private:
 	}
 	auto create_vao(void) -> void
 	{
-		attribute vertex_attribute { GL_FLOAT, 3, GL_FALSE, 5 * sizeof(f32), nullptr, false };
-		attribute texture_attribute { GL_FLOAT, 2, GL_FALSE, 5 * sizeof(f32), (void*)(sizeof(glm::vec3)), false };
+		attribute vertex_attribute { GL_FLOAT, 2, GL_FALSE, 4 * sizeof(f32), nullptr, false };
+		attribute texture_attribute { GL_FLOAT, 2, GL_FALSE, 4 * sizeof(f32), (void*)(sizeof(glm::vec2)), false };
+		/* heights will be stored in a separate buffer */
+		attribute height_attribute { GL_FLOAT, 1, GL_FALSE, sizeof(f32), nullptr, false };
 
 		layout.create();
 		layout.bind();
-		layout.attach(vertex_buffer, vertex_attribute, texture_attribute);
+		layout.attach(vertex_buffer, vertex_attribute, texture_attribute, height_attribute);
 
 		unbind_vertex_layouts();
 		unbind_buffers(GL_ARRAY_BUFFER);
@@ -168,3 +196,5 @@ private:
 
 	f32 height;
 };
+
+using default_platform_model = platform_model<platform_width, platform_depth>;
