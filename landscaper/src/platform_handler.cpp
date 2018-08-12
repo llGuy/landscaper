@@ -9,8 +9,7 @@ platform_handler::platform_handler(void)
 auto platform_handler::create(resource_handler & rh, glm::mat4 & proj) -> void
 {
 	model.create(rh);
-	platform1.create(3.0f);
-
+	platform1.create(3.0f, { model.negative_corner().x, model.negative_corner().z });
 
 	create_realistic_texture("res/textures/grass/grass", grass, rh);
 	create_realistic_texture("res/textures/dirt/dirt", dirt, rh);
@@ -89,4 +88,9 @@ auto platform_handler::create_realistic_texture(std::string const & begin_dir, r
 	normal.int_param(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	normal.int_param(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	normal.enable_mipmap(GL_TEXTURE_2D);
+}
+
+auto platform_handler::get_ground_height(f32 x, f32 z) -> f32
+{
+	return platform1.height_at(x, z);
 }

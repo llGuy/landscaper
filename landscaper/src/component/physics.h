@@ -16,8 +16,9 @@ template <> struct component <physics> : comp_base
 	component(void) = default;
 	component(platform_handler & ph) : platforms(&ph) {}
 	auto operator=(component &)->component & = default;
-	auto update(f32) -> void override 
+	auto update(f32 td) -> void override 
 	{
 		/* need to get ground height */
+		ground_height = platforms->get_ground_height(bound->pos.x, bound->pos.z);
 	}
 };

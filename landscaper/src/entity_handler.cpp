@@ -20,6 +20,7 @@ auto entity_handler::update(input_handler & ih, physics_handler & ph, f32 elapse
 	mouse_system.update(0, elapsed);
 	display_system.update(0, elapsed);
 	logging_system.update(0, elapsed);
+	physics_system.update(0, elapsed);
 
 	cam.update_view_matrix();
 }
@@ -28,8 +29,8 @@ auto entity_handler::create(glm::mat4 & projection, resource_handler & rh, input
 {
 	model.create(rh);
 	create_shaders(projection);
-	create_main(ih, players[0]);
-	create_local(ih, players[1]);
+	create_main(ih, ph, players[0]);
+	create_local(ih, ph, players[1]);
 
 	bound_entity = 0;
 	cam.bind_entity(players[bound_entity]);
@@ -67,16 +68,17 @@ auto entity_handler::render(bool is_main_target) -> void
 	}, &players[bound_entity], is_main_target, 0.0f);
 }
 
-auto entity_handler::create_main(input_handler & ih, entity & user) -> void
+auto entity_handler::create_main(input_handler & ih, platform_handler & ph, entity & user) -> void
 {
 	add_component<graphics>(graphics_system, user, model, shaders);
 	add_component<key_control>(key_system, user, ih);
 	add_component<mouse_control>(mouse_system, user, ih);
+	add_component<physics>(physics_system, user, ph);
 
 	init_player(user);
 }
 
-auto entity_handler::create_local(input_handler & ih, entity & user) -> void
+auto entity_handler::create_local(input_handler & ih, platform_handler & ph, entity & user) -> void
 {
 	add_component<graphics>(graphics_system, user, model, shaders);
 	add_component<rotation_display>(display_system, user);

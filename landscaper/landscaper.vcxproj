@@ -74,6 +74,7 @@
     <ClInclude Include="src\input_handler.h" />
     <ClInclude Include="src\lighting.h" />
     <ClInclude Include="src\log.h" />
+    <ClInclude Include="src\math\barry_centric.h" />
     <ClInclude Include="src\physics.h" />
     <ClInclude Include="src\platform.h" />
     <ClInclude Include="src\platform_model.h" />

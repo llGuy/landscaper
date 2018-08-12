@@ -17,6 +17,8 @@ public:
 	auto prepare(glm::vec3 & camera, glm::vec3 & light_pos, glm::vec4 & clip_plane) -> void;
 
 	auto render(glm::mat4 & view_matrix) -> void;
+
+	auto get_ground_height(f32 x, f32 z) -> f32;
 private:
 	auto create_shaders(glm::mat4 & proj) -> void;
 	auto create_realistic_texture(std::string const & begin_dir, realistic_texture & tex, resource_handler & rh) -> void;

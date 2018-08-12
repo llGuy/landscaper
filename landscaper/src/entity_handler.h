@@ -9,6 +9,7 @@
 
 // testing component system
 #include "component/log.h"
+#include "component/physics.h"
 #include "component/graphics.h"
 #include "component/component.h"
 #include "component/key_control.h"
@@ -34,8 +35,8 @@ private:
 
 private:
 	// component stuff
-	auto create_main(input_handler & ih, entity & user) -> void;
-	auto create_local(input_handler & ih, entity & user) -> void;
+	auto create_main(input_handler & ih, platform_handler & ph, entity & user) -> void;
+	auto create_local(input_handler & ih, platform_handler & ph, entity & user) -> void;
 	auto create_remote(void) -> entity;
 	auto init_player(entity & ent) -> void;
 private:
@@ -48,9 +49,10 @@ private:
 	camera cam;
 	u32 bound_entity;
 
-	comp_system<key_control, 5> key_system;
-	comp_system<mouse_control, 5> mouse_system;
-	comp_system<graphics, 5> graphics_system;
-	comp_system<rotation_display, 5> display_system;
-	comp_system<logging, 5> logging_system;
+	comp_system<rotation_display, num_entities> display_system;
+	comp_system<mouse_control, num_entities> mouse_system;
+	comp_system<graphics, num_entities> graphics_system;
+	comp_system<physics, num_entities> physics_system;
+	comp_system<key_control, num_entities> key_system;
+	comp_system<logging, num_entities> logging_system;
 };
