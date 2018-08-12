@@ -3,6 +3,7 @@
 #include "program.h"
 //#include "camera.h"
 #include "cube.h"
+#include "platform_handler.h"
 #include "input_handler.h"
 #include "physics.h"
 
@@ -21,7 +22,7 @@ class entity_handler
 public:
 	entity_handler(void);
 
-	auto create(glm::mat4 & projection, resource_handler & rh, input_handler & ih) -> void;
+	auto create(glm::mat4 & projection, resource_handler & rh, input_handler & ih, platform_handler & ph) -> void;
 	auto prepare(glm::mat4 & view, glm::vec4 & plane) -> void;
 	auto render(bool is_main_target) -> void;
 

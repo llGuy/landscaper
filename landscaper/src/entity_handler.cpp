@@ -24,7 +24,7 @@ auto entity_handler::update(input_handler & ih, physics_handler & ph, f32 elapse
 	cam.update_view_matrix();
 }
 
-auto entity_handler::create(glm::mat4 & projection, resource_handler & rh, input_handler & ih) -> void
+auto entity_handler::create(glm::mat4 & projection, resource_handler & rh, input_handler & ih, platform_handler & ph) -> void
 {
 	model.create(rh);
 	create_shaders(projection);

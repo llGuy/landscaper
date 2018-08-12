@@ -14,7 +14,7 @@ namespace {
 
 using default_platform_model = platform_model<platform_width, platform_depth>;
 
-class platform_handler
+class platform_handler 
 {
 public:
 	platform_handler(void);
