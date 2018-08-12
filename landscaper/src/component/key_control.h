@@ -14,7 +14,6 @@ template <> struct component <key_control> : comp_base
 	{
 	}
 	component(void) = default;
-//	auto operator=(component const &)->component & = default;
 	auto update(f32 td) -> void override
 	{  
 		using detail::up;

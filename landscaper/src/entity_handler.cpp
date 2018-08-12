@@ -1,4 +1,5 @@
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/string_cast.hpp>
 #include "entity_handler.h"
 #include "render_pipeline.h"
 
@@ -10,9 +11,13 @@ entity_handler::entity_handler(void)
 auto entity_handler::update(input_handler & ih, physics_handler & ph, f32 elapsed) -> void
 {
 //	player.update(elapsed);
-	for (u32 i = 1; i < entity::max_components; ++i)
-		if(player.components[i])
-			player.components[i]->update(elapsed);
+//	for (u32 i = 1; i < entity::max_components; ++i)
+//		if(player.components[i])
+//			player.components[i]->update(elapsed);
+	key_system.update(0, elapsed);
+	mouse_system.update(0, elapsed);
+	display_system.update(0, elapsed);
+	logging_system.update(0, elapsed);
 
 	cam.update_view_matrix();
 }
@@ -21,9 +26,12 @@ auto entity_handler::create(glm::mat4 & projection, resource_handler & rh, input
 {
 	model.create(rh);
 	create_shaders(projection);
-	create_local(ih, player);
+	create_main(ih, players[0]);
+	create_local(ih, players[1]);
 
-	cam.bind_entity(player);
+//	add_component<logging>(logging_system, players[1]);
+
+	cam.bind_entity(players[0]);
 }
 
 auto entity_handler::create_shaders(glm::mat4 & projection) -> void
@@ -39,32 +47,45 @@ auto entity_handler::create_shaders(glm::mat4 & projection) -> void
 auto entity_handler::prepare(glm::mat4 & view, glm::vec4 & plane) -> void
 {
 	glm::vec3 color { 1 };
-	glm::mat4 model_matrix = glm::translate(glm::vec3(0, 10.0f, 0));
 
 	shaders.use();
 	shaders.uniform_mat4(&view[0][0], 1);
 	shaders.uniform_4f(&plane[0], 2);
 	shaders.uniform_3f(&color[0], 3);
-	shaders.uniform_mat4(&model_matrix[0][0], 4);
 }
 
-auto entity_handler::render(void) -> void
+auto entity_handler::render(bool is_main_target) -> void
 {
-//	player.components[0]->update(0);
-
-	render_model(model, GL_TRIANGLES);
+	graphics_system.update(0.0f, [](component<graphics> * c1, entity * main, bool is_main_target, f32 td)
+	{
+		if (c1->bound == main)
+		{
+			if (!is_main_target) c1->update(td);
+		}
+		else c1->update(td);
+	}, &players[0], is_main_target, 0.0f);
 }
 
-auto entity_handler::create_local(input_handler & ih, entity & user) -> void
+auto entity_handler::create_main(input_handler & ih, entity & user) -> void
 {
-	add_component<graphics>(graphics_system, user, model);
+	add_component<graphics>(graphics_system, user, model, shaders);
 	add_component<key_control>(key_system, user, ih);
 	add_component<mouse_control>(mouse_system, user, ih);
 	init_player(user);
 }
+
+auto entity_handler::create_local(input_handler & ih, entity & user) -> void
+{
+	add_component<graphics>(graphics_system, user, model, shaders);
+	add_component<rotation_display>(display_system, user);
+
+	user.pos = glm::vec3(10);
+	user.dir = glm::vec3(1.001, 0.00001, 0.0001);
+	user.vel = glm::vec3(20);
+}
+
 auto entity_handler::create_remote(void) -> entity
 {
-	// add network component
 	return entity();
 }
 
@@ -72,5 +93,5 @@ auto entity_handler::init_player(entity & ent) -> void
 {
 	ent.pos = glm::vec3(0, 10, 0);
 	ent.dir = glm::vec3(1, 0.001, 0.001);
-	ent.vel = glm::vec3(5, 5, 5);
+	ent.vel = glm::vec3(20);
 }

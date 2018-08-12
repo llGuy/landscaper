@@ -13,6 +13,7 @@ public:
 	auto bind_entity(entity & e) -> void;
 	auto update_view_matrix(void) -> void;
 
+	inline auto bound_entity(void) -> entity * { return bound; };
 	inline auto matrix(void) -> glm::mat4 & { return view_matrix; }
 	inline auto pos(void) -> glm::vec3 &    { return bound->pos; }
 	inline auto dir(void) -> glm::vec3 &    { return bound->dir; }

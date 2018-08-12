@@ -26,12 +26,27 @@ namespace detail {
 		return result;
 	}
 
+	template <typename F> auto fequ(F a, F b) -> bool
+	{
+		return fabs(a - b) < 0.000001f;
+	}
+
+
 	namespace {
 
 		glm::mat4 identity_matrix(1);
 		glm::vec4 null_vector(0);
 		glm::vec3 up(0, 1, 0);
 
+		auto do_nothing(void) -> void {}
+
+		auto debug(bool condition) -> void
+		{
+			if (condition)
+			{
+				do_nothing();
+			}
+		}
 	}
 
 }

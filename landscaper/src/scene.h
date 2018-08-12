@@ -23,7 +23,7 @@ public:
 	auto render(timer & time) -> void override;
 	auto update(input_handler & ih, timer & time) -> game_state * override;
 private:
-	auto render_scene(glm::mat4 & view_matrix, glm::vec4 & plane, timer & t, bool water = false) -> void;
+	auto render_scene(glm::mat4 & view_matrix, glm::vec4 & plane, timer & t, bool is_main_target) -> void; 
 	auto prepare_water_renderer(timer & t) -> void;
 	auto render_debugging(void) -> void;
 private:

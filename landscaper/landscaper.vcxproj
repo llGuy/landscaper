@@ -55,8 +55,10 @@
     <ClInclude Include="src\component\component.h" />
     <ClInclude Include="src\component\graphics.h" />
     <ClInclude Include="src\component\key_control.h" />
+    <ClInclude Include="src\component\log.h" />
     <ClInclude Include="src\component\mouse_control.h" />
     <ClInclude Include="src\component\physics.h" />
+    <ClInclude Include="src\component\rotate_display.h" />
     <ClInclude Include="src\glow_final_stage.h" />
     <ClInclude Include="src\glow_stage.h" />
     <ClInclude Include="src\buffer.h" />

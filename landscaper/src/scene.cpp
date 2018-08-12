@@ -32,7 +32,7 @@ auto scene::render(timer & time) -> void
 	pipeline.bind_glow();
 	clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, 0, 0, 0);
 	entities.prepare(view_matrix, detail::null_vector);
-	entities.render();
+	entities.render(true);
 
 	pipeline.finalize_process();
 }
@@ -44,14 +44,14 @@ auto scene::prepare_water_renderer(timer & time) -> void
 
 	water.bind_refl();
 	auto inverted_matrix = invert_matrix(cam);
-	render_scene(inverted_matrix, water.refl_plane(), time, true);
+	render_scene(inverted_matrix, water.refl_plane(), time, false);
 
 	unbind_all_framebuffers(screen_res.w, screen_res.h);
 	glDisable(GL_CLIP_DISTANCE0);
 	glDisable(GL_BLEND);
 }
 
-auto scene::render_scene(glm::mat4 & view, glm::vec4 & plane, timer & t, bool render_water) -> void
+auto scene::render_scene(glm::mat4 & view, glm::vec4 & plane, timer & t, bool is_main_target) -> void
 {
 	auto & cam = entities.entity_cam();
 
@@ -69,7 +69,7 @@ auto scene::render_scene(glm::mat4 & view, glm::vec4 & plane, timer & t, bool re
 	sky_box.render();
 
 	entities.prepare(view, plane);
-	entities.render();
+	entities.render(is_main_target);
 }
 
 auto scene::update(input_handler & ih, timer & time) -> game_state *
