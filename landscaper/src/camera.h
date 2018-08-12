@@ -15,10 +15,13 @@ public:
 
 	inline auto bound_entity(void) -> entity * { return bound; };
 	inline auto matrix(void) -> glm::mat4 & { return view_matrix; }
-	inline auto pos(void) -> glm::vec3 &    { return bound->pos; }
-	inline auto dir(void) -> glm::vec3 &    { return bound->dir; }
+	inline auto pos(void) -> glm::vec3 &    { return position; }
+	inline auto dir(void) -> glm::vec3 &    { return direction; }
 private:
 	glm::mat4 view_matrix;
+
+	glm::vec3 position;
+	glm::vec3 direction;
 
 	entity * bound;
 };

@@ -28,7 +28,7 @@ namespace detail {
 
 	template <typename F> auto fequ(F a, F b) -> bool
 	{
-		return fabs(a - b) < 0.000001f;
+		return fabs(a - b) < 0.0000001f;
 	}
 
 

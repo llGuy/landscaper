@@ -39,5 +39,8 @@ auto camera::bind_entity(entity & e) -> void
 
 auto camera::update_view_matrix(void) -> void
 {
-	view_matrix = glm::lookAt(bound->pos, bound->pos + bound->dir, detail::up);
+	(position = bound->pos).y += bound->height;
+	direction = bound->dir;
+
+	view_matrix = glm::lookAt(position, position + direction, detail::up);
 }

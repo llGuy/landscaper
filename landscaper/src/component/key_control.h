@@ -24,7 +24,12 @@ template <> struct component <key_control> : comp_base
 		if (inputs->got_key(GLFW_KEY_A)) bound->pos += -glm::normalize(glm::cross(lateral_dir, up)) * bound->vel * td;
 		if (inputs->got_key(GLFW_KEY_S)) bound->pos += -lateral_dir * bound->vel * td;
 		if (inputs->got_key(GLFW_KEY_D)) bound->pos += glm::normalize(glm::cross(lateral_dir, up)) * bound->vel * td;
-		if (inputs->got_key(GLFW_KEY_SPACE)) bound->pos += up * bound->vel * td;
 		if (inputs->got_key(GLFW_KEY_LEFT_SHIFT)) bound->pos += -up * bound->vel * td;
+
+		if (inputs->got_key(GLFW_KEY_SPACE))
+		{
+			bound->pos += up * td;
+			bound->vel.y = 10.0f;
+		}
 	};
 };

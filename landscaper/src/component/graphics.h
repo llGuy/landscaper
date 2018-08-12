@@ -28,10 +28,13 @@ template <> struct component <graphics> : comp_base
 		float z_axis_rot = fequ(bound->dir.y, 0.0f) ? 0.00001f : -atan(bound->dir.x / bound->dir.y);
 		float x_axis_rot = fequ(bound->dir.y, 0.0f) ? 0.00001f : -atan(bound->dir.z / bound->dir.y);
 
+		glm::vec3 translate_vec = bound->pos;
+		translate_vec.y += bound->height;
+
 		glm::mat4 rotation = glm::rotate(y_axis_rot, glm::vec3(0, 1, 0)) *
 			glm::rotate(z_axis_rot, glm::vec3(0, 0, 1)) *
 			glm::rotate(x_axis_rot, glm::vec3(1, 0, 0));
-		glm::mat4 model_matrix = glm::translate(bound->pos) * rotation;
+		glm::mat4 model_matrix = glm::translate(translate_vec) * rotation;
 		entity_shaders->uniform_mat4(&model_matrix[0][0], 4);
 
 		render_model(*model, GL_TRIANGLES);

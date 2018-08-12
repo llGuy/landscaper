@@ -17,6 +17,7 @@ struct entity
 	pos_3D pos;
 	dir_3D dir;
 	dir_3D vel;
+	f32 height;
 	u32 comp_count;
 	u32 id;
 };
