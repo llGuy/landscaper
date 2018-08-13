@@ -9,6 +9,8 @@ template<u32 Width, u32 Depth> class platform
 public:
 	auto create(f32 height, glm::vec2 neg_corner) -> void
 	{
+		modified = false;
+
 		this->height = height;
 		neg_corner_xz = neg_corner;
 
@@ -16,9 +18,11 @@ public:
 		create_buffer();
 	}
 
-	auto operator[](u32 i) -> f32 *
+	auto changed(void) -> bool & { return modified; }
+
+	auto operator[](glm::vec2 const & i) -> f32 &
 	{
-		return &heights[i];
+		return heights[index(i.x, i.y)];
 	}
 	auto heights_buffer(void) -> buffer &
 	{
@@ -28,6 +32,13 @@ public:
 	auto get_platform_space_coord(glm::vec3 const & world_pos) -> glm::vec2 
 	{
 		return glm::vec2(world_pos.x - neg_corner_xz.x, world_pos.z - neg_corner_xz.y);
+	}
+
+	auto update_gpu(void) -> void
+	{
+		height_buffer.fill(heights.size() * sizeof(f32), heights.data(), GL_STATIC_DRAW, GL_ARRAY_BUFFER);
+
+		unbind_buffers(GL_ARRAY_BUFFER);
 	}
 
 	auto height_at(f32 x, f32 z) -> f32
@@ -120,4 +131,6 @@ private:
 	buffer height_buffer;
 
 	f32 height;
+
+	bool modified;
 };

@@ -77,6 +77,7 @@
     <ClInclude Include="src\log.h" />
     <ClInclude Include="src\math\barry_centric.h" />
     <ClInclude Include="src\math\ray_trace.h" />
+    <ClInclude Include="src\mound.h" />
     <ClInclude Include="src\physics.h" />
     <ClInclude Include="src\platform.h" />
     <ClInclude Include="src\platform_model.h" />

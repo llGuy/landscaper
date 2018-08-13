@@ -59,10 +59,10 @@ void main(void)
 	vec3 dirt_specular = calculate_specular(dirt_normal) * 0.0004;
 
 	vec4 diffuse = vec4(mix(dirt_diffuse, grass_diffuse, angle_cos), 1.0);
-	vec4 specular = vec4(mix(dirt_specular, grass_specular, angle_cos), 1.0);
+	//vec4 specular = vec4(mix(dirt_specular, grass_specular, angle_cos), 1.0);
 
-	//vec4 specular = vec4(calculate_specular(face_normal).xyz, 1.0f);
+	vec4 specular = vec4(calculate_specular(face_normal).xyz, 1.0f);
 	//vec4 diffuse = vec4(calculate_specular(face_normal).xyz, 1.0f);
 
-	final_color = mix(dirt_color, grass_color, angle_cos) + diffuse * 0.8f + specular;
+	final_color = mix(dirt_color, grass_color, angle_cos) + diffuse * 0.8f;// +specular;
 }

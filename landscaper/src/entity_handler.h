@@ -13,6 +13,7 @@
 #include "component/graphics.h"
 #include "component/component.h"
 #include "component/key_control.h"
+#include "component/terraforming.h"
 #include "component/mouse_control.h"
 #include "component/rotate_display.h"
 
@@ -49,6 +50,7 @@ private:
 	camera cam;
 	u32 bound_entity;
 
+	comp_system<terraforming, num_entities> terraforming_system;
 	comp_system<rotation_display, num_entities> display_system;
 	comp_system<mouse_control, num_entities> mouse_system;
 	comp_system<graphics, num_entities> graphics_system;

@@ -254,6 +254,9 @@
     <ClInclude Include="src\component\terraforming.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\mound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\platform\vsh.shader" />

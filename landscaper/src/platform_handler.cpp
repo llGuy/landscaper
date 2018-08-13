@@ -32,6 +32,12 @@ auto platform_handler::prepare(glm::vec3 & camera, glm::vec3 & light_pos, glm::v
 
 	dirt.color.bind(GL_TEXTURE_2D, 2);
 	dirt.normal_map.bind(GL_TEXTURE_2D, 3);
+
+	if (platform1.changed())
+	{
+		platform1.update_gpu();
+		platform1.changed() = false;
+	}
 }
 
 auto platform_handler::render(glm::mat4 & view_matrix) -> void

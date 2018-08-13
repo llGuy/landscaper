@@ -16,11 +16,12 @@ auto entity_handler::update(input_handler & ih, physics_handler & ph, f32 elapse
 		cam.bind_entity(players[bound_entity]);
 	}
 
-	key_system.update(0, elapsed);
-	mouse_system.update(0, elapsed);
+	terraforming_system.update(0, elapsed);
 	display_system.update(0, elapsed);
 	logging_system.update(0, elapsed);
 	physics_system.update(0, elapsed);
+	mouse_system.update(0, elapsed);
+	key_system.update(0, elapsed);
 
 	cam.update_view_matrix();
 }
@@ -71,8 +72,9 @@ auto entity_handler::render(bool is_main_target) -> void
 auto entity_handler::create_main(input_handler & ih, platform_handler & ph, entity & user) -> void
 {
 	add_component<graphics>(graphics_system, user, model, shaders);
-	add_component<key_control>(key_system, user, ih);
+	add_component<terraforming>(terraforming_system, user, ih, ph);
 	add_component<mouse_control>(mouse_system, user, ih);
+	add_component<key_control>(key_system, user, ih);
 	add_component<physics>(physics_system, user, ph);
 
 	init_player(user);
