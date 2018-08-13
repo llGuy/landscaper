@@ -5,34 +5,53 @@
 #include "component.h"
 #include "key_control.h"
 #include "../platform_handler.h"
+#include <glm/gtx/string_cast.hpp>
 
 struct physics;
 template <> struct component <physics> : comp_base
 {
-	static constexpr f32 gravity_at_sea = -30.5f;
+	static constexpr f32 gravity_at_sea = -37.5f;
 
 	f32 ground_height;
 	platform_handler * platforms;
 	entity * bound;
 	component(void) = default;
-	component(platform_handler & ph) : platforms(&ph) {}
+	component(platform_handler & ph) 
+		: platforms(&ph) 
+	{
+	}
 	auto operator=(component &)->component & = default;
-	auto update(f32 td) -> void override 
+	auto update(f32 td) -> void override
 	{
 		using detail::fequ;
+		entity_data & ent = bound->data;
 
 		/* need to get ground height */
-		ground_height = platforms->get_ground_height(bound->pos.x, bound->pos.z);
+		ground_height = platforms->get_ground_height(ent.pos.x, ent.pos.z);
 
-		if (fequ(ground_height, bound->pos.y) || ground_height > bound->pos.y)
+		ent.pos += ent.vel * td;
+
+		if (fequ(ground_height, ent.pos.y) || ground_height > ent.pos.y)
 		{
-			bound->pos.y = ground_height;
-			bound->vel.y = 0;
+			ent.pos.y = ground_height;
+			ent.vel = glm::vec3(0);
+			ent.at_ground_height = true;
+
+			// increase the speed
+			if (ent.speed < ent.max_walk_speed) ent.speed += ent.max_walk_speed * 5.0f * td;
+			else ent.speed = ent.max_walk_speed;
 		}
 		else
 		{
-			bound->pos.y = bound->pos.y + bound->vel.y * td;
-			bound->vel.y = bound->vel.y + gravity_at_sea * td;
+			f32 vel_y = ent.vel.y;
+
+			ent.vel.x *= (1.0f - td / 2.0f);
+			ent.vel.z *= (1.0f - td / 2.0f);
+
+			ent.vel.y = vel_y + gravity_at_sea * td;
+			ent.at_ground_height = false;
+
+			ent.speed = 0;
 		}
 	}
 };

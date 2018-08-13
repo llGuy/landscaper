@@ -20,11 +20,12 @@ template <> struct component <logging> : comp_base
 		{
 			using detail::fequ;
 			using detail::debug;
+			entity_data const & ent = bound->data;
 
 			// log entity
 			printf("logging entity %d' s info:\n", bound->id);
-			printf("position : %s\n", glm::to_string(bound->pos).c_str());
-			printf("direction : %s\n", glm::to_string(bound->dir).c_str());
+			printf("position : %s\n", glm::to_string(ent.pos).c_str());
+			printf("direction : %s\n", glm::to_string(ent.dir).c_str());
 			std::cout << std::endl;
 		}
 	}

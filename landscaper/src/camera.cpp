@@ -21,7 +21,7 @@ auto look_fps(glm::vec2 const & cursor_dif,
 	return res;
 }
 
-auto invert_matrix(camera & cam)->glm::mat4
+auto invert_matrix(camera & cam) -> glm::mat4
 {
 	using detail::up;
 	glm::vec3 inverted_position = cam.pos();
@@ -39,8 +39,8 @@ auto camera::bind_entity(entity & e) -> void
 
 auto camera::update_view_matrix(void) -> void
 {
-	(position = bound->pos).y += bound->height;
-	direction = bound->dir;
+	(position = bound->data.pos).y += bound->data.height + 2.0f;
+	direction = bound->data.dir;
 
 	view_matrix = glm::lookAt(position, position + direction, detail::up);
 }

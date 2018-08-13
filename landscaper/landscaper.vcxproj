@@ -59,6 +59,7 @@
     <ClInclude Include="src\component\mouse_control.h" />
     <ClInclude Include="src\component\physics.h" />
     <ClInclude Include="src\component\rotate_display.h" />
+    <ClInclude Include="src\component\terraforming.h" />
     <ClInclude Include="src\glow_final_stage.h" />
     <ClInclude Include="src\glow_stage.h" />
     <ClInclude Include="src\buffer.h" />
@@ -75,6 +76,7 @@
     <ClInclude Include="src\lighting.h" />
     <ClInclude Include="src\log.h" />
     <ClInclude Include="src\math\barry_centric.h" />
+    <ClInclude Include="src\math\ray_trace.h" />
     <ClInclude Include="src\physics.h" />
     <ClInclude Include="src\platform.h" />
     <ClInclude Include="src\platform_model.h" />

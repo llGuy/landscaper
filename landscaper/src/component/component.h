@@ -9,15 +9,23 @@
 
 struct comp_base { virtual auto update(f32 td) -> void = 0; };
 
+struct entity_data 
+{ 
+	pos_3D pos; dir_3D dir; dir_3D vel; 
+	f32 speed; f32 height; 
+	bool at_ground_height { false }; 
+
+	f32 max_walk_speed;
+};
+
 struct entity 
 { 
 	static constexpr u32 max_components = 5;
 
 	std::array<comp_base *, max_components> components{ 0 };
-	pos_3D pos;
-	dir_3D dir;
-	dir_3D vel;
-	f32 height;
+
+	entity_data data;
+
 	u32 comp_count;
 	u32 id;
 };

@@ -18,18 +18,35 @@ template <> struct component <key_control> : comp_base
 	{  
 		using detail::up;
 
-		dir_3D lateral_dir = glm::normalize(dir_3D(bound->dir.x, 0, bound->dir.z));
+		entity_data & ent = bound->data;
 
-		if (inputs->got_key(GLFW_KEY_W)) bound->pos += lateral_dir * bound->vel * td;
-		if (inputs->got_key(GLFW_KEY_A)) bound->pos += -glm::normalize(glm::cross(lateral_dir, up)) * bound->vel * td;
-		if (inputs->got_key(GLFW_KEY_S)) bound->pos += -lateral_dir * bound->vel * td;
-		if (inputs->got_key(GLFW_KEY_D)) bound->pos += glm::normalize(glm::cross(lateral_dir, up)) * bound->vel * td;
-		if (inputs->got_key(GLFW_KEY_LEFT_SHIFT)) bound->pos += -up * bound->vel * td;
-
-		if (inputs->got_key(GLFW_KEY_SPACE))
+		if (ent.at_ground_height)
 		{
-			bound->pos += up * td;
-			bound->vel.y = 12.0f;
+			dir_3D lateral_dir = glm::normalize(dir_3D(ent.dir.x, 0, ent.dir.z));
+
+			/* lateral movement */
+			u32 count = 0;
+			if (inputs->got_key(GLFW_KEY_W)) move(lateral_dir, ent.vel, td, count);
+			if (inputs->got_key(GLFW_KEY_A)) move(-glm::normalize(glm::cross(lateral_dir, up)), ent.vel, td, count);
+			if (inputs->got_key(GLFW_KEY_S)) move(-lateral_dir, ent.vel, td, count);
+			if (inputs->got_key(GLFW_KEY_D)) move(glm::normalize(glm::cross(lateral_dir, up)), ent.vel, td, count);
+
+			if (count == 0) ent.speed = 0;
+
+			if (inputs->got_key(GLFW_KEY_LEFT_SHIFT)) move(-up, ent.vel, td, count);
+
+			if (inputs->got_key(GLFW_KEY_SPACE))
+			{
+				ent.vel.y = 12.0f;
+				ent.pos += ent.vel * td;
+			}
 		}
 	};
+
+private:
+	auto move(glm::vec3 const & dir, glm::vec3 & vel, f32 td, u32 & counter) -> void
+	{
+		vel += dir * bound->data.speed;
+		++counter;
+	}
 };

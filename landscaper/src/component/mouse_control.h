@@ -19,13 +19,15 @@ template <> struct component <mouse_control> : comp_base
 	auto operator=(component &)->component & = default;
 	auto update(f32 td) -> void override 
 	{
+		entity_data & ent = bound->data;
+
 		if (glm::all(glm::lessThan(previous_cursor, glm::vec2(-0xFE, -0xFE))))
 			previous_cursor = mouse->cursor_position();
 		else if(mouse->cursor_moved())
 		{
 			glm::vec2 difference = mouse->cursor_position() - previous_cursor;
 			previous_cursor = mouse->cursor_position();
-			bound->dir = look_fps(difference, bound->dir, td);
+			ent.dir = look_fps(difference, ent.dir, td);
 		}
 	}
 };

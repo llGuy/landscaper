@@ -83,10 +83,12 @@ auto entity_handler::create_local(input_handler & ih, platform_handler & ph, ent
 	add_component<graphics>(graphics_system, user, model, shaders);
 	add_component<rotation_display>(display_system, user);
 
-	user.pos = glm::vec3(10.0f, 3.0f, 10.0f);
-	user.dir = glm::vec3(1.001, 0.00001, 0.0001);
-	user.vel = glm::vec3(20);
-	user.height = 4.0f;
+	user.data.pos = glm::vec3(10.0f, 3.0f, 10.0f);
+	user.data.dir = glm::vec3(1.001, 0.00001, 0.0001);
+	user.data.vel = glm::vec3(0.0f);
+	user.data.speed = 0.0f;
+	user.data.max_walk_speed = 15.0f;
+	user.data.height = 4.0f;
 }
 
 auto entity_handler::create_remote(void) -> entity
@@ -96,8 +98,10 @@ auto entity_handler::create_remote(void) -> entity
 
 auto entity_handler::init_player(entity & ent) -> void
 {
-	ent.pos = glm::vec3(0, 10, 0);
-	ent.dir = glm::vec3(1, 0.001, 0.001);
-	ent.vel = glm::vec3(20, 0, 20);
-	ent.height = 4.0f;
+	ent.data.pos = glm::vec3(0, 10, 0);
+	ent.data.dir = glm::vec3(1, 0.001, 0.001);
+	ent.data.vel = glm::vec3(0.0f);
+	ent.data.speed = 0.0f;
+	ent.data.max_walk_speed = 15.0f;
+	ent.data.height = 4.0f;
 }

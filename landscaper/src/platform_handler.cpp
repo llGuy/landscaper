@@ -9,7 +9,7 @@ platform_handler::platform_handler(void)
 auto platform_handler::create(resource_handler & rh, glm::mat4 & proj) -> void
 {
 	model.create(rh);
-	platform1.create(3.0f, { model.negative_corner().x, model.negative_corner().z });
+	platform1.create(1.5f, { model.negative_corner().x, model.negative_corner().z });
 
 	create_realistic_texture("res/textures/grass/grass", grass, rh);
 	create_realistic_texture("res/textures/dirt/dirt", dirt, rh);
