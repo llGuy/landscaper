@@ -31,7 +31,7 @@ template <> struct component <physics> : comp_base
 
 		ent.pos += ent.vel * td;
 
-		if (fequ(ground_height, ent.pos.y) || ground_height > ent.pos.y)
+		if (fequ(ground_height, ent.pos.y) || ground_height > ent.pos.y || fequ(ent.vel.y, 0.0f))
 		{
 			ent.pos.y = ground_height;
 			ent.vel = glm::vec3(0);

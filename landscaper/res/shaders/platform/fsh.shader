@@ -18,6 +18,7 @@ uniform sampler2D grass_normals;
 uniform sampler2D dirt_texture;
 uniform sampler2D dirt_normals;
 
+uniform vec3 camera_position;
 uniform vec3 light_position;
 
 const vec3 light_color = vec3(1, 0.5, 0) * 0.7;
@@ -28,18 +29,35 @@ vec3 calculate_diffuse(vec3 normal)
 	return vec3(diffuse, diffuse, diffuse);
 }
 
+float power(float a, int e)
+{
+	float o = a;
+	for (int i = 0; i < e; ++i)
+	{
+		o *= a;
+	}
+	return o;
+}
+
 vec3 calculate_specular(vec3 normal)
 {
-	vec3 reflected_light = reflect(normalize(light_vector), normal);
+/*	vec3 reflected_light = reflect(normalize(light_vector), normal);
 	float specular = dot(reflected_light, normalize(to_camera));
 	specular = pow(specular, 30.0f);
 	vec3 specular_highlights = light_color * specular;
 
-	return specular_highlights;
+	return specular_highlights;*/
+
+	vec3 l_vector = normalize(light_position - world_position);
+	vec3 reflected_light = -reflect(l_vector, normal);
+	vec3 eye_vector = normalize(camera_position - world_position);
+	float specularity = clamp(dot(reflected_light, eye_vector), 0, 1);
+
+	return vec3(power(specularity, 31)) * light_color;
 }
 
-//const vec3 grass_color = vec3(0.14, 0.56, 0.14);
-//const vec3 dirt_color = vec3(0.45, 0.26, 0.24);
+//const vec4 grass_color = vec4(0.14, 0.56, 0.14, 1);
+//const vec4 dirt_color = vec4(0.45, 0.26, 0.24, 1);
 
 void main(void)
 {
@@ -59,10 +77,10 @@ void main(void)
 	vec3 dirt_specular = calculate_specular(dirt_normal) * 0.0004;
 
 	vec4 diffuse = vec4(mix(dirt_diffuse, grass_diffuse, angle_cos), 1.0);
-	//vec4 specular = vec4(mix(dirt_specular, grass_specular, angle_cos), 1.0);
+	vec4 specular = vec4(mix(dirt_specular, grass_specular, angle_cos), 1.0);
 
-	vec4 specular = vec4(calculate_specular(face_normal).xyz, 1.0f);
-	//vec4 diffuse = vec4(calculate_specular(face_normal).xyz, 1.0f);
+	//vec4 specular = vec4(calculate_specular(face_normal).xyz, 1.0f);
+	//vec4 diffuse = vec4(calculate_diffuse(face_normal).xyz, 1.0f);
 
-	final_color = mix(dirt_color, grass_color, angle_cos) + diffuse * 0.8f;// +specular;
+	final_color = mix(dirt_color, grass_color, angle_cos) + diffuse * 0.8f + specular;
 }

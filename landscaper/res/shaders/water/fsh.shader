@@ -13,9 +13,10 @@ uniform sampler2D depth_texture;
 uniform vec3 camera_position;
 uniform float move_factor;
 
-const vec3 light_color = vec3(1, 0.5, 0) * 0.7;
+//const vec3 light_color = vec3(1, 0.5, 0) * 0.7;
+const vec3 light_color = vec3(1);
 const float wave_strength = 0.02f;
-const float shine_damper = 30.0f;
+const float shine_damper = 40.0f;
 const float reflectivity = 0.6;
 
 const float near = 0.001f;
@@ -24,6 +25,16 @@ const float far = 1000.0f;
 float convert_depth(float raw)
 {
 	return 2.0f * near * far / (far + near - (2.0f * raw - 1.0f) * (far - near));
+}
+
+float power(float a, int e)
+{
+	float o = a;
+	for (int i = 0; i < e; ++i)
+	{
+		o *= a;
+	}
+	return o;
 }
 
 void main(void)
@@ -44,8 +55,9 @@ void main(void)
 	vec3 normal = vec3(normal_color.r * 2.0f - 1.0f, normal_color.b, normal_color.g * 2.0f - 1.0f);
 
 	vec3 reflected_light = reflect(normalize(from_light_vector), normal);
-	float specular = dot(reflected_light, normalize(to_camera));
+	float specular = clamp(dot(reflected_light, normalize(to_camera)), 0, 1);
 	specular = pow(specular, shine_damper);
+//		power(specular, 31);
 	vec3 specular_highlights = light_color * specular * reflectivity;
 
 	final_color = reflection_color + vec4(specular_highlights, 0.0f);

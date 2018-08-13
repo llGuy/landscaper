@@ -20,7 +20,7 @@ void main(void)
 	clip_space = projection_matrix * view_matrix * vec4(vertex_position, 1.0f);
 	gl_Position = clip_space;
 
-	texture_coords = (vec2(vertex_position.x + 128.0f, vertex_position.z + 128.0f)) / 256.0f * 3.0;
+	texture_coords = (vec2(vertex_position.x + 128.0f, vertex_position.z + 128.0f)) / 256.0f * 6.0;
 	to_camera = camera_position - vertex_position;
 	from_light_vector = vertex_position - light_position;
 }

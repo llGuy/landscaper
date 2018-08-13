@@ -6,7 +6,7 @@ class lighting
 {
 public:
 	lighting(void) 
-		: sun_pos(0, 1000.0f, -100000.0f)
+		: sun_pos(0.0f, 1000.0f, 100000.0f)
 	{
 	}
 
