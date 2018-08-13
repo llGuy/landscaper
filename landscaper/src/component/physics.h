@@ -15,12 +15,14 @@ template <> struct component <physics> : comp_base
 	f32 ground_height;
 	platform_handler * platforms;
 	entity * bound;
+
 	component(void) = default;
 	component(platform_handler & ph) 
 		: platforms(&ph) 
 	{
 	}
 	auto operator=(component &)->component & = default;
+
 	auto update(f32 td) -> void override
 	{
 		using detail::fequ;
@@ -33,25 +35,37 @@ template <> struct component <physics> : comp_base
 
 		if (fequ(ground_height, ent.pos.y) || ground_height > ent.pos.y || fequ(ent.vel.y, 0.0f))
 		{
-			ent.pos.y = ground_height;
-			ent.vel = glm::vec3(0);
-			ent.at_ground_height = true;
-
-			// increase the speed
-			if (ent.speed < ent.max_walk_speed) ent.speed += ent.max_walk_speed * 5.0f * td;
-			else ent.speed = ent.max_walk_speed;
+			move_at_ground(ground_height);
 		}
 		else
 		{
-			f32 vel_y = ent.vel.y;
-
-			ent.vel.x *= (1.0f - td / 2.0f);
-			ent.vel.z *= (1.0f - td / 2.0f);
-
-			ent.vel.y = vel_y + gravity_at_sea * td;
-			ent.at_ground_height = false;
-
-			ent.speed = 0;
+			move_in_air(ground_height);
 		}
+	}
+private:
+	auto move_at_ground(f32 ground_height) -> void
+	{
+		entity_data & ent = bound->data;
+
+		ent.pos.y = ground_height;
+		ent.vel = glm::vec3(0);
+		ent.at_ground_height = true;
+
+		/* increase the speed */
+		if (ent.speed < ent.max_walk_speed) ent.speed += ent.max_walk_speed * 5.0f * td;
+		else ent.speed = ent.max_walk_speed;
+	}
+
+	auto move_in_air(f32 ground_height) -> void
+	{
+		f32 vel_y = ent.vel.y;
+
+		ent.vel.x *= (1.0f - td / 2.0f);
+		ent.vel.z *= (1.0f - td / 2.0f);
+
+		ent.vel.y = vel_y + gravity_at_sea * td;
+		ent.at_ground_height = false;
+
+		ent.speed = 0;
 	}
 };
