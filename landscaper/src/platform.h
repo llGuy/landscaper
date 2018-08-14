@@ -2,6 +2,7 @@
 
 #include <array>
 #include "types.h"
+#include "mound.h"
 #include "math/barry_centric.h"
 
 template<u32 Width, u32 Depth> class platform
@@ -67,6 +68,18 @@ public:
 		}
 
 		return height;
+	}
+
+	auto is_on_platform_mesh_space(f32 x, f32 z) -> bool
+	{
+		return x > 0.0f && x < (Width - 1.0f) &&
+			z > 0.0f && z < (Depth - 1.0f);
+	}
+
+	auto is_within_mesh_space(f32 x, f32 z, f32 rad) -> bool
+	{
+		return x > rad && Width - x > rad &&
+			z > rad && Depth - z > rad;
 	}
 private:
 	auto create_heights(void) -> void

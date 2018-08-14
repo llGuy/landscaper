@@ -47,3 +47,11 @@ public:
 private:
 	std::vector<mound_point> points;
 };
+
+namespace {
+
+	constexpr u32 default_mound_size = 20;
+
+}
+
+using default_mound = mound_quarter_prototype<default_mound_size>;

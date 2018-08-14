@@ -14,6 +14,7 @@ struct entity_data
 	pos_3D pos; dir_3D dir; dir_3D vel; 
 	f32 speed; f32 height; 
 	bool at_ground_height { false }; 
+	bool flying { false };
 
 	f32 max_walk_speed;
 };

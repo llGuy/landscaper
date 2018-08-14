@@ -69,7 +69,9 @@ private:
 
 				glm::vec2 mesh_space = platforms->operator[](0).get_platform_space_coord(world);
 
-				return std::make_optional<glm::vec2>(mesh_space);
+				if (platforms->operator[](0).is_within_mesh_space(mesh_space.x, mesh_space.y, default_mound_size))
+					return std::make_optional<glm::vec2>(mesh_space);
+				else return std::optional<glm::vec2>();
 			}
 		}
 		return std::optional<glm::vec2>();
@@ -78,28 +80,32 @@ private:
 	auto update_quarter(glm::ivec2 const & pos, i32 intensity_x, i32 intensity_z,
 		bool update_center, bool update_radius, f32 td) -> void
 	{
+		auto & plat = platforms->operator[](0);
 		auto & mound = platforms->mound_prot();
 
 		for (u32 moundindex = 0; moundindex < mound.size(); ++moundindex)
 		{
 			auto mp = mound.at(moundindex, pos, intensity_x, intensity_z);
-
-			bool update_vertex = true;
-			if (!update_radius)
+			/* check if mound point is on the platform */
+			if (plat.is_on_platform_mesh_space(mp.coord.x, mp.coord.y))
 			{
-				update_vertex &= !(mp.coord.x == pos.x || mp.coord.y == pos.y);
-			}
-			if (!update_center)
-			{
-				update_vertex &= !(mp.coord == pos);
-			}
-			if (update_vertex)
-			{
-				if (true)
+				bool update_vertex = true;
+				if (!update_radius)
 				{
-					f32 & vert_y = platforms->operator[](0).operator[](mp.coord);
-					f32 newHeight = vert_y + mp.quotient * 2.0f;
-					if (vert_y < newHeight) vert_y += mp.quotient * 2.0f * td;
+					update_vertex &= !(mp.coord.x == pos.x || mp.coord.y == pos.y);
+				}
+				if (!update_center)
+				{
+					update_vertex &= !(mp.coord == pos);
+				}
+				if (update_vertex)
+				{
+					if (true)
+					{
+						f32 & vert_y = platforms->operator[](0).operator[](mp.coord);
+						f32 newHeight = vert_y + mp.quotient * 15.0f;
+						if (vert_y < newHeight) vert_y += mp.quotient * 15.0f* td;
+					}
 				}
 			}
 		}

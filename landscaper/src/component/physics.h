@@ -33,17 +33,20 @@ template <> struct component <physics> : comp_base
 
 		ent.pos += ent.vel * td;
 
-		if (fequ(ground_height, ent.pos.y) || ground_height > ent.pos.y || fequ(ent.vel.y, 0.0f))
+		if (!ent.flying)
 		{
-			move_at_ground(ground_height);
-		}
-		else
-		{
-			move_in_air(ground_height);
+			if (fequ(ground_height, ent.pos.y) || ground_height > ent.pos.y || fequ(ent.vel.y, 0.0f))
+			{
+				move_at_ground(ground_height, td);
+			}
+			else
+			{
+				move_in_air(ground_height, td);
+			}
 		}
 	}
 private:
-	auto move_at_ground(f32 ground_height) -> void
+	auto move_at_ground(f32 ground_height, f32 td) -> void
 	{
 		entity_data & ent = bound->data;
 
@@ -56,8 +59,10 @@ private:
 		else ent.speed = ent.max_walk_speed;
 	}
 
-	auto move_in_air(f32 ground_height) -> void
+	auto move_in_air(f32 ground_height, f32 td) -> void
 	{
+		entity_data & ent = bound->data;
+
 		f32 vel_y = ent.vel.y;
 
 		ent.vel.x *= (1.0f - td / 2.0f);

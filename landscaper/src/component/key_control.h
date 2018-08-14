@@ -20,7 +20,16 @@ template <> struct component <key_control> : comp_base
 
 		entity_data & ent = bound->data;
 
-		if (ent.at_ground_height)
+		if (ent.flying)
+		{
+			ent.vel = glm::vec3(0);
+			ent.speed = 30.0f;
+			ent.at_ground_height = false;
+		}
+
+		if (inputs->got_key(GLFW_KEY_P)) ent.flying ^= true;
+
+		if (ent.at_ground_height || ent.flying)
 		{
 			dir_3D lateral_dir = glm::normalize(dir_3D(ent.dir.x, 0, ent.dir.z));
 

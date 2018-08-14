@@ -9,8 +9,8 @@
 
 namespace {
 
-	constexpr u32 platform_width = 64;
-	constexpr u32 platform_depth = 64;
+	constexpr u32 platform_width = 128;
+	constexpr u32 platform_depth = 128;
 
 }
 

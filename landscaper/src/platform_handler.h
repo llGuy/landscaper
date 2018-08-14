@@ -7,8 +7,6 @@
 #include "mound.h"
 #include <vector>
 
-using default_mound = mound_quarter_prototype<10>;
-
 class platform_handler 
 {
 public:

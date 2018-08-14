@@ -22,7 +22,7 @@ auto platform_handler::prepare(glm::vec3 & camera, glm::vec3 & light_pos, glm::v
 	/* implement batch rendering system */
 	shaders.use();
 
-	shaders.uniform_1f(32.0f, 3);
+	shaders.uniform_1f(256.0f, 3);
 	shaders.uniform_3f(&camera[0], 4);
 	shaders.uniform_3f(&light_pos[0], 5);
 	shaders.uniform_4f(&clip_plane[0], 6);
