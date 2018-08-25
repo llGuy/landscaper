@@ -13,8 +13,8 @@ uniform sampler2D depth_texture;
 uniform vec3 camera_position;
 uniform float move_factor;
 
-//const vec3 light_color = vec3(1, 0.5, 0) * 0.7;
-const vec3 light_color = vec3(1);
+const vec3 light_color = vec3(1, 0.5, 0) * 0.7;
+//const vec3 light_color = vec3(1);
 const float wave_strength = 0.02f;
 const float shine_damper = 40.0f;
 const float reflectivity = 0.6;

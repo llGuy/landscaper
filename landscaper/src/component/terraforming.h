@@ -103,8 +103,8 @@ private:
 					if (true)
 					{
 						f32 & vert_y = platforms->operator[](0).operator[](mp.coord);
-						f32 newHeight = vert_y + mp.quotient * 15.0f;
-						if (vert_y < newHeight) vert_y += mp.quotient * 15.0f* td;
+						f32 newHeight = vert_y + mp.quotient * 18.0f;
+						if (vert_y < newHeight) vert_y += mp.quotient * 18.0f* td;
 					}
 				}
 			}

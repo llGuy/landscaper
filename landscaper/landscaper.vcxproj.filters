@@ -257,6 +257,15 @@
     <ClInclude Include="src\mound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\component\bullet_physics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\component\shooting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\platform\vsh.shader" />
@@ -277,5 +286,7 @@
     <None Include="res\shaders\blur\horizontal_vsh.shader" />
     <None Include="res\shaders\blur\final_vsh.shader" />
     <None Include="res\shaders\blur\final_fsh.shader" />
+    <None Include="res\shaders\blur\black_vsh.shader" />
+    <None Include="res\shaders\blur\black_fsh.shader" />
   </ItemGroup>
 </Project>

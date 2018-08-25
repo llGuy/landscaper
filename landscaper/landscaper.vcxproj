@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application.h" />
+    <ClInclude Include="src\component\bullet_physics.h" />
     <ClInclude Include="src\component\component.h" />
     <ClInclude Include="src\component\graphics.h" />
     <ClInclude Include="src\component\key_control.h" />
@@ -59,7 +60,9 @@
     <ClInclude Include="src\component\mouse_control.h" />
     <ClInclude Include="src\component\physics.h" />
     <ClInclude Include="src\component\rotate_display.h" />
+    <ClInclude Include="src\component\shooting.h" />
     <ClInclude Include="src\component\terraforming.h" />
+    <ClInclude Include="src\entities.h" />
     <ClInclude Include="src\glow_final_stage.h" />
     <ClInclude Include="src\glow_stage.h" />
     <ClInclude Include="src\buffer.h" />
@@ -103,6 +106,8 @@
     <ClInclude Include="src\window.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shaders\blur\black_fsh.shader" />
+    <None Include="res\shaders\blur\black_vsh.shader" />
     <None Include="res\shaders\blur\final_fsh.shader" />
     <None Include="res\shaders\blur\final_vsh.shader" />
     <None Include="res\shaders\blur\fsh.shader" />

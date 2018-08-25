@@ -70,14 +70,21 @@ public:
 		return height;
 	}
 
-	auto is_on_platform_mesh_space(f32 x, f32 z) -> bool
+	template <typename T> auto is_on_platform_mesh_space(T px, T pz) -> bool
 	{
-		return x > 0.0f && x < (Width - 1.0f) &&
-			z > 0.0f && z < (Depth - 1.0f);
+		i32 x = static_cast<i32>(px);
+		i32 z = static_cast<i32>(pz);
+
+		return x > 0 && x < (Width - 1) &&
+			z > 0 && z < (Depth - 1);
 	}
 
-	auto is_within_mesh_space(f32 x, f32 z, f32 rad) -> bool
+	template <typename T, typename U> auto is_within_mesh_space(T px, T pz, U prad) -> bool
 	{
+		f32 x = static_cast<f32>(px);
+		f32 z = static_cast<f32>(pz);
+		f32 rad = static_cast<f32>(prad);
+
 		return x > rad && Width - x > rad &&
 			z > rad && Depth - z > rad;
 	}

@@ -94,19 +94,3 @@ template <typename C, typename S, typename ... Ps> auto add_component(S && sys, 
 
 	++(sys.count());
 }
-
-/* compile time component systems tests */
-template <typename ... T> struct const_entity 
-{
-	std::tuple <component<T>...> components;
-
-	template <typename T> auto get(void) 
-	{
-		return std::get<component<T>>(components);
-	}
-
-	auto component_count(void) -> u32 
-	{
-		return std::tuple_size<std::tuple<component<T>...>>::value;
-	}
-};
