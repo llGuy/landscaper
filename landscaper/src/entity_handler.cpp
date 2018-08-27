@@ -2,6 +2,16 @@
 #include <glm/gtx/string_cast.hpp>
 #include "entity_handler.h"
 #include "render_pipeline.h"
+/* libraries for components */
+#include "ecs/log.h"
+#include "ecs/display.h"
+#include "ecs/graphics.h"
+#include "ecs/terraforming.h"
+#include "ecs/mouse_control.h"
+#include "ecs/player_physics.h"
+#include "ecs/basic_components.h"
+#include "ecs/basic_key_control.h"
+#include "ecs/complex_key_control.h"
 
 entity_handler::entity_handler(void)
 	: model(2.0f)
@@ -10,31 +20,27 @@ entity_handler::entity_handler(void)
 
 auto entity_handler::update(input_handler & ih, physics_handler & ph, f32 elapsed) -> void
 {
-	if (ih.got_key(GLFW_KEY_F1))
-	{
-		bound_entity = (bound_entity + 1) % num_entities;
-		cam.bind_entity(players[bound_entity]);
-	}
+	ecs.update_except<graphics>(elapsed, entities);
 
-	terraforming_system.update(0, elapsed);
-	display_system.update(0, elapsed);
-	logging_system.update(0, elapsed);
-	physics_system.update(0, elapsed);
-	mouse_system.update(0, elapsed);
-	key_system.update(0, elapsed);
-
-	cam.update_view_matrix();
+	cam.update_view_matrix(ecs);
 }
 
 auto entity_handler::create(glm::mat4 & projection, resource_handler & rh, input_handler & ih, platform_handler & ph) -> void
 {
 	model.create(rh);
 	create_shaders(projection);
-	create_main(ih, ph, players[0]);
-	create_local(ih, ph, players[1]);
 
+	create_ecs();
+
+	/* initialize entities */
+	entities.push_back(entity());
+	create_main(entities.back(), ih, ph, bound_entity);
+	entities.push_back(entity());
+	create_display(entities.back(), glm::vec3(40.0f, 10.0f, 40.0f), 1);
+
+	/* initialize camera */
 	bound_entity = 0;
-	cam.bind_entity(players[bound_entity]);
+	cam.bind_entity(entities[bound_entity]);
 }
 
 auto entity_handler::create_shaders(glm::mat4 & projection) -> void
@@ -59,51 +65,82 @@ auto entity_handler::prepare(glm::mat4 & view, glm::vec4 & plane) -> void
 
 auto entity_handler::render(bool is_main_target) -> void
 {
-	graphics_system.update(0.0f, [](component<graphics> * c1, entity * main, bool is_main_target, f32 td)
+	ecs.update_only<graphics>(0, entities, [this, &is_main_target](i32 other) 
 	{
-		if (c1->bound == main)
+		if (other == bound_entity)
 		{
-			if (!is_main_target) c1->update(td);
+			if (!is_main_target) return true;
+			else return false;
 		}
-		else c1->update(td);
-	}, &players[bound_entity], is_main_target, 0.0f);
+		else return true;
+	});
 }
 
-auto entity_handler::create_main(input_handler & ih, platform_handler & ph, entity & user) -> void
+auto entity_handler::create_ecs(void) -> void
 {
-	add_component<graphics>(graphics_system, user, model, shaders);
-	add_component<terraforming>(terraforming_system, user, ih, ph);
-	add_component<mouse_control>(mouse_system, user, ih);
-	add_component<key_control>(key_system, user, ih);
-	add_component<physics>(physics_system, user, ph);
-
-	init_player(user);
+	/* most systems will start with a capacity of 32 because
+	 * they are the systems that all entities need 
+	 * e.g. height or, is_flying, max_walk_speed
+	 */
+	ecs.add_system<height>(32);
+	ecs.add_system<logging>(32);
+	ecs.add_system<is_flying>(32);
+	ecs.add_system<mouse_control>(2);
+	ecs.add_system<basic_key_control>(2);
+	ecs.add_system<complex_key_control>(2);
+	ecs.add_system<is_at_ground_height>(32);
+	ecs.add_system<player_physics>(32);
+	ecs.add_system<max_walk_speed>(32);
+	ecs.add_system<terraforming>(32);
+	ecs.add_system<graphics>(32);
+	ecs.add_system<display>(2);
 }
 
-auto entity_handler::create_local(input_handler & ih, platform_handler & ph, entity & user) -> void
+auto entity_handler::create_display(entity & user, glm::vec3 const & pos, i32 index) -> void
 {
-	add_component<graphics>(graphics_system, user, model, shaders);
-	add_component<rotation_display>(display_system, user);
+	entity_data & data = user.get_data();
+	/* initialize data of the entity */
+	data.pos = pos;
+	data.dir = glm::vec3(1.001, 0.00001, 0.0001);
 
-	user.data.pos = glm::vec3(10.0f, 3.0f, 10.0f);
-	user.data.dir = glm::vec3(1.001, 0.00001, 0.0001);
-	user.data.vel = glm::vec3(0.0f);
-	user.data.speed = 0.0f;
-	user.data.max_walk_speed = 15.0f;
-	user.data.height = 4.0f;
+	ecs.add_component<display>(user, index);
+	ecs.add_component<graphics>(user, index, model, shaders);
+}
+
+auto entity_handler::create_main(entity & user, input_handler & ih, platform_handler & ph, i32 index) -> void
+{
+	entity_data & data = user.get_data();
+	/* initialize data of the entity */
+	data.pos = glm::vec3(0, 10, 0);
+	data.dir = glm::vec3(0.1, 0.1, 1.0f);
+	data.vel = glm::vec3(0);
+	data.speed = 0.0f;
+	/* initialize the components of the entity */
+	/* data initialization always comes first */
+	ecs.add_component<height>(user, index, height{ 4.0f });
+	ecs.add_component<is_flying>(user, index, is_flying{ false });
+	ecs.add_component<max_walk_speed>(user, index, max_walk_speed{ 15.0f });
+	ecs.add_component<is_at_ground_height>(user, index, is_at_ground_height{ false });
+
+	ecs.add_component<mouse_control>(user, index, ih);
+	ecs.add_component<complex_key_control>(user, index, ih);
+	ecs.add_component<player_physics>(user, index, ph);
+	ecs.add_component<terraforming>(user, index, ih, ph);
+	ecs.add_component<graphics>(user, index, model, shaders);
 }
 
 auto entity_handler::create_remote(void) -> entity
 {
+	/* will need (to be implemented) network component */
 	return entity();
 }
 
 auto entity_handler::init_player(entity & ent) -> void
 {
-	ent.data.pos = glm::vec3(0, 10, 0);
-	ent.data.dir = glm::vec3(1, 0.001, 0.001);
-	ent.data.vel = glm::vec3(0.0f);
-	ent.data.speed = 0.0f;
-	ent.data.max_walk_speed = 15.0f;
-	ent.data.height = 4.0f;
+	entity_data & data = ent.get_data();
+	data.pos = glm::vec3(0, 10, 0);
+	data.dir = glm::vec3(1, 0.001, 0.001);
+	data.vel = glm::vec3(0.0f);
+	data.speed = 0.0f;
+	data.speed = 15.0f;
 }

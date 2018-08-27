@@ -1,5 +1,6 @@
 #include "camera.h"
 #include "detail.h"
+#include "ecs/basic_components.h"
 #include <glm/gtx/transform.hpp>
 
 #define SENSITIVITY 0.02f
@@ -35,12 +36,19 @@ auto invert_matrix(camera & cam) -> glm::mat4
 auto camera::bind_entity(entity & e) -> void
 {
 	bound = &e;
+	height_component_index = bound->get_component_index<height>();
 }
 
-auto camera::update_view_matrix(void) -> void
+auto camera::update_view_matrix(entity_cs & ecs) -> void
 {
-	(position = bound->data.pos).y += bound->data.height + 2.0f;
-	direction = bound->data.dir;
+	entity_data & data = bound->get_data();
 
-	view_matrix = glm::lookAt(position, position + direction, detail::up);
+	if (bound == nullptr) view_matrix = glm::lookAt(glm::vec3(0), glm::vec3(0.1, 0.1, 1.0), glm::vec3(0, 1, 0));
+	else
+	{
+		(position = data.pos).y += ecs.get_component<height>(height_component_index).value.val + 2.0f;
+		direction = data.dir;
+
+		view_matrix = glm::lookAt(position, position + direction, detail::up);
+	}
 }

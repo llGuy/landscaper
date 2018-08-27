@@ -1,28 +1,34 @@
 #pragma once
 
-#include <glm/gtx/transform.hpp>
-#include "../render_pipeline.h"
-#include "../renderable.h"
-#include "../program.h"
+#include "ecs.h"
 #include "../detail.h"
-#include "component.h"
+#include "../program.h"
+#include "../renderable.h"
+#include "basic_components.h"
+#include "../render_pipeline.h"
+#include <glm/gtx/transform.hpp>
 
-struct graphics;
-template <> struct component <graphics> : comp_base 
+template <> struct component <struct graphics> : public icomponent
 {
-	entity const * bound;
 	renderable * model;
 	program * entity_shaders;
 
-	component(renderable & m, program & shaders) : model(&m), entity_shaders(&shaders)
+	i32 height_component_index;
+
+	component(entity & subject, i32 index, renderable & m, program & shaders) 
+		: model(&m), entity_shaders(&shaders), icomponent::icomponent(index)
 	{
+		height_component_index = subject.get_component_index<height>();
 	}
 	component(void) = default;
-	auto operator=(component &) -> component & = default;
-	auto update(f32) -> void override
+
+	auto operator=(component &)->component & = default;
+
+	auto update(f32, std::vector<entity> & entities, entity_cs & ecs) -> void override
 	{
 		using detail::fequ;
-		entity_data const & ent = bound->data;
+		auto const & ent = entities[entity_index].get_data();
+		auto entity_height = ecs.get_component<height>(height_component_index).value.val;
 
 		// calculate angle that player is facing
 		float y_axis_rot = fequ(ent.dir.x, 0.0f) ? 0.00001f : -atan(ent.dir.z / ent.dir.x);
@@ -30,7 +36,7 @@ template <> struct component <graphics> : comp_base
 		float x_axis_rot = fequ(ent.dir.y, 0.0f) ? 0.00001f : -atan(ent.dir.z / ent.dir.y);
 
 		glm::vec3 translate_vec = ent.pos;
-		translate_vec.y += ent.height;
+		translate_vec.y += entity_height;
 
 		glm::mat4 rotation = glm::rotate(y_axis_rot, glm::vec3(0, 1, 0)) *
 			glm::rotate(z_axis_rot, glm::vec3(0, 0, 1)) *

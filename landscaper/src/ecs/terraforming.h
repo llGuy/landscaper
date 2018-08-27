@@ -1,33 +1,41 @@
 #pragma once
 
+#include "ecs.h"
 #include <optional>
-#include "component.h"
 #include "../detail.h"
+#include "basic_components.h"
 #include "../input_handler.h"
 #include "../math/ray_trace.h"
 #include "../platform_handler.h"
 
-struct terraforming;
-template <> struct component <terraforming> : comp_base 
+template <> struct component <struct terraforming> : public icomponent
 {
-	entity * bound;
 	platform_handler * platforms;
 	input_handler * mouse_input;
 
 	bool terraforming = false;
 	glm::vec2 terraforming_point;
 
-	component(input_handler & ih, platform_handler & ph) : mouse_input(&ih), platforms(&ph) {}
+	i32 height_component_index;
+
+	component(entity & subject, i32 index, input_handler & ih, platform_handler & ph) 
+		: mouse_input(&ih), platforms(&ph), icomponent::icomponent(index)
+	{
+		height_component_index = subject.get_component_index<height>();
+	}
 	component(void) = default;
 
-	auto update (f32 td) -> void
+	auto update(f32 td, std::vector<entity> & entities, entity_cs & ecs) -> void override
 	{
+		auto & data = entities[entity_index].get_data();
+		auto entity_height = ecs.get_component<height>(height_component_index).value.val;
+
 		if (mouse_input->got_mouse_button(GLFW_MOUSE_BUTTON_2))
 		{
 			/* terraform at the point the player is facing */
 			if (!terraforming)
 			{
-				auto point = get_point_player_is_facing();
+				auto point = get_point_player_is_facing(data, entity_height);
 				if (point.has_value())
 				{
 					/* place terraforming mound */
@@ -48,14 +56,12 @@ template <> struct component <terraforming> : comp_base
 		}
 	}
 private:
-	auto get_point_player_is_facing(void) -> std::optional<glm::vec2> 
+	auto get_point_player_is_facing(entity_data & ent, f32 height) -> std::optional<glm::vec2>
 	{
 		using detail::fequ;
 
-		entity_data & ent = bound->data;
-
-		for (ray ray_cast(ent.pos + glm::vec3(0, ent.height, 0), ent.dir, 0.25f, 8.0f); 
-			ray_cast.distance_covered() < ray_cast.distance_max(); 
+		for (ray ray_cast(ent.pos + glm::vec3(0, height, 0), ent.dir, 0.25f, 8.0f);
+			ray_cast.distance_covered() < ray_cast.distance_max();
 			ray_cast.extend())
 		{
 			auto ray_pos = ray_cast.current_position();

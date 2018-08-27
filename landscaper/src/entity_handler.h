@@ -7,15 +7,9 @@
 #include "input_handler.h"
 #include "physics.h"
 
-#include "entities.h"
-#include "component/log.h"
-#include "component/physics.h"
-#include "component/graphics.h"
-#include "component/component.h"
-#include "component/key_control.h"
-#include "component/terraforming.h"
-#include "component/mouse_control.h"
-#include "component/rotate_display.h"
+#include "camera.h"
+
+#include "ecs/ecs.h"
 
 using entity_model = cube;
 
@@ -35,8 +29,9 @@ private:
 	auto create_shaders(glm::mat4 & projection) -> void;
 private:
 	// component stuff
-	auto create_main(input_handler & ih, platform_handler & ph, entity & user) -> void;
-	auto create_local(input_handler & ih, platform_handler & ph, entity & user) -> void;
+	auto create_ecs(void) -> void;
+	auto create_display(entity & user, glm::vec3 const & pos, i32 index) -> void;
+	auto create_main(entity & user, input_handler & ih, platform_handler & ph, i32 index) -> void;
 	auto create_remote(void) -> entity;
 	auto init_player(entity & ent) -> void;
 private:
@@ -45,17 +40,10 @@ private:
 	program shaders;
 	entity_model model;
 	 
-	std::array<entity, num_entities> players;
-	std::vector<entity> bullets;
+	std::vector<entity> entities;
 
 	camera cam;
 	u32 bound_entity;
 
-	comp_system<terraforming, num_entities> terraforming_system;
-	comp_system<rotation_display, num_entities> display_system;
-	comp_system<mouse_control, num_entities> mouse_system;
-	comp_system<graphics, num_entities> graphics_system;
-	comp_system<physics, num_entities> physics_system;
-	comp_system<key_control, num_entities> key_system;
-	comp_system<logging, num_entities> logging_system;
+	entity_cs ecs;
 };
