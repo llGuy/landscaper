@@ -2,6 +2,7 @@
 
 //#include "component/component.h"
 #include "ecs/ecs.h"
+#include "vec_dd.h"
 #include "types.h"
 
 #include <glm/glm.hpp>
@@ -11,8 +12,8 @@ class camera
 public:
 	camera(void) = default;
 
-	auto bind_entity(i32 index, std::vector<entity> & entities) -> void;
-	auto update_view_matrix(std::vector<entity> & entities, entity_cs & ecs) -> void;
+	auto bind_entity(i32 index, vec_dd<entity> & entities) -> void;
+	auto update_view_matrix(vec_dd<entity> & entities, entity_cs & ecs) -> void;
 
 	inline auto bound_entity(void) -> i32 { return bound_entity_index; };
 	inline auto matrix(void) -> glm::mat4 & { return view_matrix; }

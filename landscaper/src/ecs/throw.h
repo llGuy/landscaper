@@ -26,7 +26,7 @@ public:
 		rock_throw_timer.start();
 		height_component_index = subject.get_component_index<height>();
 	}
-	auto update(f32 td, std::vector<entity> & entities, entity_cs & ecs) -> void override
+	auto update(f32 td, vec_dd<entity> & entities, entity_cs & ecs) -> void override
 	{
 		auto & data = entities[entity_index].get_data();
 		auto & subject_height = ecs.get_component<height>(height_component_index).value.val;

@@ -11,7 +11,7 @@ public:
 	{
 	}
 
-	auto update(f32 td, std::vector<entity> & entities, entity_cs &) -> void override
+	auto update(f32 td, vec_dd<entity> & entities, entity_cs &) -> void override
 	{
 		auto & ent = entities[entity_index].get_data();
 

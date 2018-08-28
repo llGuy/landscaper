@@ -20,7 +20,7 @@ public:
 		at_ground_height_component_index = subject.get_component_index<is_at_ground_height>();
 	}
 	component(void) = default;
-	auto update(f32 td, std::vector<entity> & entities, entity_cs & ecs) -> void override
+	auto update(f32 td, vec_dd<entity> & entities, entity_cs & ecs) -> void override
 	{
 		using detail::up;
 

@@ -15,7 +15,7 @@ public:
 	{
 	}
 	component(void) = default;
-	auto update(f32 td, std::vector<entity> & entities, entity_cs & ecs) -> void override
+	auto update(f32 td, vec_dd<entity> & entities, entity_cs & ecs) -> void override
 	{
 		using detail::up;
 		entity_data & ent = entities[entity_index].get_data();

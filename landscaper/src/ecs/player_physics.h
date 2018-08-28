@@ -30,7 +30,7 @@ public:
 
 	auto operator=(component &) -> component & = default;
 
-	auto update(f32 td, std::vector<entity> & entities, entity_cs & ecs) -> void override
+	auto update(f32 td, vec_dd<entity> & entities, entity_cs & ecs) -> void override
 	{
 		detail::debug(entity_index == 0);
 

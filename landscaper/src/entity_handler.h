@@ -2,6 +2,7 @@
 
 #include "cube.h"
 #include "camera.h"
+#include "vec_dd.h"
 #include "ecs/ecs.h"
 #include "program.h"
 #include "physics.h"
@@ -39,7 +40,7 @@ private:
 
 	program shaders;
 	entity_model model;
-	std::vector<entity> entities;
+	vec_dd<entity> entities;
 	/* whenever M1 button is pressed, a new entity will be pushed
 	 * to the pending rocks stack, and on every update function,
 	 * the entity_handler will make sure to add the pending rocks to the

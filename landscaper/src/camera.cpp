@@ -33,13 +33,13 @@ auto invert_matrix(camera & cam) -> glm::mat4
 	return glm::lookAt(inverted_position, inverted_position + inverted_direction, up);
 }
 
-auto camera::bind_entity(i32 index, std::vector<entity> & entities) -> void
+auto camera::bind_entity(i32 index, vec_dd<entity> & entities) -> void
 {
 	bound_entity_index = index;
 	height_component_index = entities[bound_entity_index].get_component_index<height>();
 }
 
-auto camera::update_view_matrix(std::vector<entity> & entities, entity_cs & ecs) -> void
+auto camera::update_view_matrix(vec_dd<entity> & entities, entity_cs & ecs) -> void
 {
 	entity_data & data = entities[bound_entity_index].get_data();
 

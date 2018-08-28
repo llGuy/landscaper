@@ -37,10 +37,10 @@ auto entity_handler::create(glm::mat4 & projection, resource_handler & rh, input
 	create_ecs();
 
 	/* initialize entities */
-	entities.push_back(entity());
-	create_main(entities.back(), ih, ph, 0);
-	entities.push_back(entity());
-	create_display(entities.back(), glm::vec3(40.0f, 10.0f, 40.0f), 1);
+	i32 at_main = entities.add(entity());
+	create_main(entities[at_main], ih, ph, at_main);
+	i32 at_display = entities.add(entity());
+	create_display(entities[at_display], glm::vec3(40.0f, 10.0f, 40.0f), at_display);
 
 	/* initialize camera */
 	bind_camera_to(0);
@@ -68,7 +68,7 @@ auto entity_handler::prepare(glm::mat4 & view, glm::vec4 & plane) -> void
 
 auto entity_handler::render(bool is_main_target) -> void
 {
-	ecs.update_only<graphics>(0, entities, [this, &is_main_target](i32 other) 
+	ecs.update_only<graphics>(0.0f, entities, [this, &is_main_target](i32 other) 
 	{
 		if (other == cam.bound_entity())
 		{
@@ -150,13 +150,13 @@ auto entity_handler::create_rock(platform_handler & ph) -> void
 	auto rock = pending_rocks.top();
 	pending_rocks.pop();
 
-	entity new_rock; 
-	i32 index = entities.size();
+	i32 index = entities.add(entity());
+	entity & new_rock = entities[index];
 	/* initialize new rock entity */
 	auto & data = new_rock.get_data();
 	data.pos = rock.start_position;
 	data.dir = rock.start_direction;
-	data.speed = 40.0f;
+	data.speed = 100.0f;
 	data.size = 0.25f;
 	/* add components for the rock entity */
 	ecs.add_component<height>(new_rock, index, height{ 0 });
@@ -164,7 +164,6 @@ auto entity_handler::create_rock(platform_handler & ph) -> void
 	ecs.add_component<graphics>(new_rock, index, model, shaders);
 	ecs.add_component<rock_physics>(new_rock, index, ph);
 
-	entities.push_back(new_rock);
 }
 
 auto entity_handler::init_player(entity & ent) -> void

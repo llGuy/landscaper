@@ -27,7 +27,7 @@ public:
 
 	auto operator=(component &)->component & = default;
 
-	auto update(f32, std::vector<entity> & entities, entity_cs & ecs) -> void override
+	auto update(f32, vec_dd<entity> & entities, entity_cs & ecs) -> void override
 	{
 		using detail::fequ;
 		auto const & ent = entities[entity_index].get_data();

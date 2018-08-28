@@ -3,9 +3,10 @@
 #include <stack>
 #include <vector>
 #include <stdint.h>
-#include "../types.h"
 #include <algorithm>
 #include <functional>
+#include "../types.h"
+#include "../vec_dd.h"
 #include <unordered_map>
 
 class entity_cs;
@@ -55,7 +56,7 @@ public:
 	icomponent(i32 index) : entity_index(index) {}
 	virtual ~icomponent(void) = default;
 	/* components may need to access other common components such as height or is_flying */
-	virtual auto update(f32 id, std::vector<entity> & entities, entity_cs & ecs) -> void {}
+	virtual auto update(f32 id, vec_dd<entity> & entities, entity_cs & ecs) -> void {}
 	virtual auto destroy(void) -> void { entity_index = -1; }
 	virtual auto active(void) -> bool { return entity_index != -1; }
 
@@ -93,7 +94,7 @@ public:
 class isystem
 {
 public:
-	virtual auto update(f32 td, std::vector<entity> & entities, 
+	virtual auto update(f32 td, vec_dd<entity> & entities, 
 		entity_cs & ecs, std::function<bool(i32)> const &) -> void = 0;
 	virtual auto remove(i32 at) -> void = 0;
 };
@@ -104,21 +105,18 @@ public:
 template <typename T> class component_system : public isystem
 {
 private:
-	std::vector<component<T>> components;
-	/* when a component is removed, the index of
-	that component gets pushed for possible re-use */
-	std::stack<i32, std::vector<i32>> bin;
+	vec_dd<component<T>> components;
 public:
 	using type = T;
 
 	component_system(i32 initial_size)
+		: components(initial_size)
 	{
-		components.reserve(initial_size);
 	}
 
-	auto update(f32 td, std::vector<entity> & entities, entity_cs & ecs, std::function<bool(i32)> const & func) -> void override
+	auto update(f32 td, vec_dd<entity> & entities, entity_cs & ecs, std::function<bool(i32)> const & func) -> void override
 	{
-		for (u32 i = 0; i < components.size(); ++i)
+		for (u32 i = 0; i < components.vec_size(); ++i)
 			if (components[i].active() && func(components[i].subject_index())) 
 				components[i].update(td, entities, ecs);
 	}
@@ -129,23 +127,13 @@ public:
 public:
 	template <typename ... Args> auto add(Args && ... constr_args) -> i32
 	{
-		i32 index = components.size();
-		if (bin.empty()) components.emplace_back(std::forward<Args>(constr_args)...);
-		else
-		{
-			/* construct in-place */
-			index = bin.top();
-			auto * at_ptr = &(components[index]);
-			new(at_ptr) component<T>(std::forward<Args>(constr_args)...);
-			bin.pop();
-		}
-		return index;
+		return components.emplace(std::forward<Args>(constr_args)...);
 	}
 
 	auto remove(i32 at) -> void override
 	{
 		components[at].destroy();
-		bin.push(at);
+		components.remove(at);
 	}
 };
 
@@ -154,19 +142,19 @@ class entity_cs
 private:
 	std::vector<isystem *> systems;
 public:
-	template <typename ... T> auto update_except(f32 td, std::vector<entity> & entities,
+	template <typename ... T> auto update_except(f32 td, vec_dd<entity> & entities,
 		std::function<bool(i32)> const & depr = [](i32) { return true; }) -> void
 	{
 		for (u32 i = 0; i < systems.size(); ++i)
 			if (((component_type<T>::value != i) && ...))
 				systems[i]->update(td, entities, *this, depr);
 	}
-	template <typename ... T> auto update_only(f32 td, std::vector<entity> & entities, 
+	template <typename ... T> auto update_only(f32 td, vec_dd<entity> & entities, 
 		std::function<bool(i32)> const & depr = [](i32) { return true; }) -> void
 	{
 		(systems[component_type<T>::value]->update(td, entities, *this, depr), ...);
 	}
-	auto update(f32 td, std::vector<entity> & entities,
+	auto update(f32 td, vec_dd<entity> & entities,
 		std::function<bool(i32)> const & depr = [](i32) { return true; }) -> void
 	{
 		std::for_each(systems.begin(), systems.end(),
