@@ -7,8 +7,9 @@
 #include "../platform_handler.h"
 #include <glm/gtx/string_cast.hpp>
 
-template <> struct component <struct player_physics> : public icomponent
+template <> class component <struct player_physics> : public icomponent
 {
+private:
 	static constexpr f32 gravity_at_sea = -37.5f;
 
 	f32 ground_height;
@@ -17,7 +18,7 @@ template <> struct component <struct player_physics> : public icomponent
 	i32 flying_component_index;
 	i32 max_walk_speed_component_index;
 	i32 at_ground_height_component_index;
-
+public:
 	component(void) = default;
 	component(entity & subject, i32 entity_index, platform_handler & ph)
 		: platforms(&ph), icomponent::icomponent(entity_index)
@@ -31,6 +32,8 @@ template <> struct component <struct player_physics> : public icomponent
 
 	auto update(f32 td, std::vector<entity> & entities, entity_cs & ecs) -> void override
 	{
+		detail::debug(entity_index == 0);
+
 		using detail::fequ;
 		auto & flying             = ecs.get_component<is_flying>(flying_component_index).value.val;
 		auto & ent_max_walk_speed = ecs.get_component<max_walk_speed>(max_walk_speed_component_index).value.val;

@@ -11,10 +11,10 @@ class camera
 public:
 	camera(void) = default;
 
-	auto bind_entity(entity & e) -> void;
-	auto update_view_matrix(entity_cs & ecs) -> void;
+	auto bind_entity(i32 index, std::vector<entity> & entities) -> void;
+	auto update_view_matrix(std::vector<entity> & entities, entity_cs & ecs) -> void;
 
-	inline auto bound_entity(void) -> entity * { return bound; };
+	inline auto bound_entity(void) -> i32 { return bound_entity_index; };
 	inline auto matrix(void) -> glm::mat4 & { return view_matrix; }
 	inline auto pos(void) -> glm::vec3 & { return position; }
 	inline auto dir(void) -> glm::vec3 & { return direction; }
@@ -24,7 +24,8 @@ private:
 	glm::vec3 position;
 	glm::vec3 direction;
 
-	entity * bound{ nullptr };
+	/* using indices because dealing with vectors */
+	i32 bound_entity_index{ -1 };
 
 	i32 height_component_index{ 0 };
 };

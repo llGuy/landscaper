@@ -8,8 +8,9 @@
 #include "../math/ray_trace.h"
 #include "../platform_handler.h"
 
-template <> struct component <struct terraforming> : public icomponent
+template <> class component <struct terraforming> : public icomponent
 {
+private:
 	platform_handler * platforms;
 	input_handler * mouse_input;
 
@@ -17,7 +18,7 @@ template <> struct component <struct terraforming> : public icomponent
 	glm::vec2 terraforming_point;
 
 	i32 height_component_index;
-
+public:
 	component(entity & subject, i32 index, input_handler & ih, platform_handler & ph) 
 		: mouse_input(&ih), platforms(&ph), icomponent::icomponent(index)
 	{

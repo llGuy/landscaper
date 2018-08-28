@@ -5,12 +5,12 @@
 #include "../camera.h"
 #include "../input_handler.h"
 
-template <> struct component <struct mouse_control> : public icomponent
+template <> class component <struct mouse_control> : public icomponent
 {
-	// pointer to input handler 
+private:
 	input_handler * mouse;
 	glm::vec2 previous_cursor;
-
+public:
 	component(entity &, i32 entity_index, input_handler & ih) 
 		: mouse(&ih), previous_cursor(-0xFF), icomponent::icomponent(entity_index)
 	{

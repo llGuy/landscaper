@@ -4,11 +4,12 @@
 #include "../detail.h"
 #include "../input_handler.h"
 
-template <> struct component <struct basic_key_control> : public icomponent
+template <> class component <struct basic_key_control> : public icomponent
 {
+private:
 	/* pointer to input handler */
 	input_handler * inputs;
-
+public:
 	component(entity &, i32 entity_index, input_handler & ih) 
 		: inputs(&ih), icomponent::icomponent(entity_index)
 	{

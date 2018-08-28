@@ -1,15 +1,13 @@
 #pragma once
 
-#include "program.h"
-//#include "camera.h"
 #include "cube.h"
-#include "platform_handler.h"
-#include "input_handler.h"
-#include "physics.h"
-
 #include "camera.h"
-
 #include "ecs/ecs.h"
+#include "program.h"
+#include "physics.h"
+#include "rock_data.h"
+#include "input_handler.h"
+#include "platform_handler.h"
 
 using entity_model = cube;
 
@@ -33,17 +31,20 @@ private:
 	auto create_display(entity & user, glm::vec3 const & pos, i32 index) -> void;
 	auto create_main(entity & user, input_handler & ih, platform_handler & ph, i32 index) -> void;
 	auto create_remote(void) -> entity;
+	auto create_rock(void) -> void;
 	auto init_player(entity & ent) -> void;
+	auto bind_camera_to(i32 index) -> void;
 private:
 	static constexpr u32 num_entities = 2;
 
 	program shaders;
 	entity_model model;
-	 
 	std::vector<entity> entities;
-
+	/* whenever M1 button is pressed, a new entity will be pushed
+	 * to the pending rocks stack, and on every update function,
+	 * the entity_handler will make sure to add the pending rocks to the
+	 * vector of entities */
+	rock_stack pending_rocks;
 	camera cam;
-	u32 bound_entity;
-
 	entity_cs ecs;
 };

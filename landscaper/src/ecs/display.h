@@ -3,8 +3,9 @@
 #include "ecs.h"
 #include <glm/gtx/transform.hpp>
 
-template <> struct component <struct display> : public icomponent
+template <> class component <struct display> : public icomponent
 {
+public:
 	component(entity & subject, i32 index)
 		: icomponent::icomponent(index)
 	{

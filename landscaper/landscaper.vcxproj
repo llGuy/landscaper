@@ -61,7 +61,9 @@
     <ClInclude Include="src\ecs\mouse_control.h" />
     <ClInclude Include="src\ecs\player_physics.h" />
     <ClInclude Include="src\ecs\graphics.h" />
+    <ClInclude Include="src\ecs\rock_physics.h" />
     <ClInclude Include="src\ecs\terraforming.h" />
+    <ClInclude Include="src\ecs\throw.h" />
     <ClInclude Include="src\entities.h" />
     <ClInclude Include="src\glow_final_stage.h" />
     <ClInclude Include="src\glow_stage.h" />
@@ -94,6 +96,7 @@
     <ClInclude Include="src\render_pipeline.h" />
     <ClInclude Include="src\resolution.h" />
     <ClInclude Include="src\resources.h" />
+    <ClInclude Include="src\rock_data.h" />
     <ClInclude Include="src\scene.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\sky.h" />

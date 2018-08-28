@@ -5,7 +5,7 @@
 #include "../detail.h"
 #include <glm/gtx/string_cast.hpp>
 
-template <> struct component <struct logging> : public icomponent
+template <> class component <struct logging> : public icomponent
 {
 public:
 	u32 count{ 0 };

@@ -5,13 +5,14 @@
 #include "../input_handler.h"
 #include "basic_components.h"
 
-template <> struct component <struct complex_key_control> : public icomponent
+template <> class component <struct complex_key_control> : public icomponent
 {
-	// pointer to input handler 
+private:
+	/* pointer to input handler */
 	input_handler * inputs;
 	i32 flying_component_index;
 	i32 at_ground_height_component_index;
-
+public:
 	component(entity & subject, i32 entity_index, input_handler & ih)
 		: inputs(&ih), icomponent::icomponent(entity_index)
 	{
