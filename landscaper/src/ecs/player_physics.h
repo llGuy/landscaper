@@ -32,8 +32,6 @@ public:
 
 	auto update(f32 td, vec_dd<entity> & entities, entity_cs & ecs) -> void override
 	{
-		detail::debug(entity_index == 0);
-
 		using detail::fequ;
 		auto & flying             = ecs.get_component<is_flying>(flying_component_index).value.val;
 		auto & ent_max_walk_speed = ecs.get_component<max_walk_speed>(max_walk_speed_component_index).value.val;

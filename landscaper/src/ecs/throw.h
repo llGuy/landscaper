@@ -32,7 +32,7 @@ public:
 		auto & subject_height = ecs.get_component<height>(height_component_index).value.val;
 		if (mouse->got_mouse_button(GLFW_MOUSE_BUTTON_1)) 
 			/* make sure player cannot spam rocks */
-			if (rock_throw_timer.elapsed() > 0.3f)
+			if (rock_throw_timer.elapsed() > 0.2f)
 				create_rock(data, subject_height);
 	}
 private:

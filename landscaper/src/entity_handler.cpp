@@ -157,7 +157,7 @@ auto entity_handler::create_rock(platform_handler & ph) -> void
 	data.pos = rock.start_position;
 	data.dir = rock.start_direction;
 	data.speed = 100.0f;
-	data.size = 0.25f;
+	data.size = 0.2f;
 	/* add components for the rock entity */
 	ecs.add_component<height>(new_rock, index, height{ 0 });
 	ecs.add_component<color>(new_rock, index, color{ glm::vec3(1, 0.5, 0.2) });

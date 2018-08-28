@@ -27,6 +27,8 @@ public:
 			printf("logging entity %d's info : \n", entity_index);
 			printf("position : %s\n", glm::to_string(subject.get_data().pos).c_str());
 			printf("direction : %s\n", glm::to_string(subject.get_data().dir).c_str());
+			printf("entities size : %d \n", entities.amount());
+			printf("entities cap : %d \n\n", entities.vec_size());
 			std::cout << std::endl;
 		}
 	}

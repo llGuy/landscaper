@@ -180,7 +180,6 @@ public:
 
 		auto & sys = get_system<T>();
 		i32 comp_at = sys.add(subject, std::forward<Args>(constr_args)...);
-//		subject.components.insert({ component_type<T>::value, comp_at });
 		subject.add_component({ component_type<T>::value, comp_at });
 	}
 public:

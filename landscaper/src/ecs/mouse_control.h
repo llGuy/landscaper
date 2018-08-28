@@ -12,7 +12,7 @@ private:
 	glm::vec2 previous_cursor;
 public:
 	component(entity &, i32 entity_index, input_handler & ih) 
-		: mouse(&ih), previous_cursor(-0xFF), icomponent::icomponent(entity_index)
+		: mouse(&ih), previous_cursor(-1.0f), icomponent::icomponent(entity_index)
 	{
 	}
 	component(void) = default;
@@ -21,7 +21,9 @@ public:
 	{
 		entity_data & ent = entities[entity_index].get_data();
 
-		if (glm::all(glm::lessThan(previous_cursor, glm::vec2(-0xFE, -0xFE))))
+		detail::debug(mouse->got_mouse_button(GLFW_MOUSE_BUTTON_3));
+
+		if (glm::all(glm::lessThan(glm::abs(previous_cursor - glm::vec2(-1.0f)), glm::vec2(0.0000001f))))
 			previous_cursor = mouse->cursor_position();
 		else if (mouse->cursor_moved())
 		{

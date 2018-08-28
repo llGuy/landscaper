@@ -30,7 +30,7 @@ public:
 		return height_buffer;
 	}
 
-	auto get_platform_space_coord(glm::vec3 const & world_pos) -> glm::vec2 
+	auto get_platform_space_coord(glm::vec3 const & world_pos) -> glm::vec2
 	{
 		return glm::vec2(world_pos.x - neg_corner_xz.x, world_pos.z - neg_corner_xz.y);
 	}
@@ -55,7 +55,7 @@ public:
 		u32 indices[3];
 
 		/* get corner of tile in platform space (starting from 0, 0) */
-		glm::vec2 tile_coord{ floor(x) + static_cast<f32>(Width) / 2.0f, 
+		glm::vec2 tile_coord{ floor(x) + static_cast<f32>(Width) / 2.0f,
 			floor(z) + static_cast<f32>(Depth) / 2.0f };
 
 		if (position_on_tile.y <= position_on_tile.x)
@@ -68,6 +68,29 @@ public:
 		}
 
 		return height;
+	}
+
+	auto normal_at(f32 x, f32 z) -> glm::vec3
+	{
+		glm::vec3 normal;
+
+		if (outside_platform(x, z)) return glm::vec3(-1);
+
+		glm::vec2 position_on_tile{ x - floor(x), z - floor(z) };
+		u32 tri_indices[3];
+		glm::vec2 tile_coord (floor(x) + static_cast<f32>(Width) / 2.0f,
+			floor(z) + static_cast<f32>(Depth) / 2.0f);
+
+		if (position_on_tile.y <= position_on_tile.x)
+		{
+			normal = get_normal(tile_coord, glm::vec2(1, 0), glm::vec2(1, 1), tri_indices);
+		}
+		else
+		{
+			normal = get_normal(tile_coord, glm::vec2(1, 1), glm::vec2(0, 1), tri_indices);
+		}
+
+		return normal;
 	}
 
 	template <typename T> auto is_on_platform_mesh_space(T px, T pz) -> bool
@@ -143,6 +166,20 @@ private:
 		glm::vec3 coord3(offset2.x, heights[indices[2]], offset2.y);
 
 		return barry_centric(coord1, coord2, coord3, glm::vec2(pos_on_tile.x, pos_on_tile.y));
+	}
+
+	auto get_normal(glm::vec2 const & tile_coord, glm::vec2 const & offset1,
+		glm::vec2 const & offset2, u32 * indices) -> glm::vec3
+	{
+		indices[0] = index(tile_coord.x, tile_coord.y);
+		indices[1] = index(tile_coord.x + offset1.x, tile_coord.y + offset1.y);
+		indices[2] = index(tile_coord.x + offset2.x, tile_coord.y + offset2.y);
+
+		glm::vec3 a = glm::vec3(tile_coord.x, heights[indices[0]], tile_coord.y);
+		glm::vec3 b = glm::vec3(tile_coord.x + offset1.x, heights[indices[1]], tile_coord.y + offset1.y);
+		glm::vec3 c = glm::vec3(tile_coord.x + offset2.x, heights[indices[2]], tile_coord.y + offset2.y);
+
+		return glm::normalize(glm::cross(c - a, b - a));
 	}
 private:
 	std::array<f32, (Width * Depth) + (4 * 4)> heights;

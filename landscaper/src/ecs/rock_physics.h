@@ -17,9 +17,29 @@ public:
 	}
 	auto update(f32 td, vec_dd<entity> & entities, entity_cs & ecs) -> void override
 	{
+		using detail::fequ;
+
 		auto & data = entities[entity_index].get_data();
 		data.pos += data.vel * td;
 
+		f32 ground_height = platforms->get_ground_height(data.pos.x, data.pos.z);
+
 		data.vel.y = data.vel.y + gravity_at_sea * td;
+
+		if (fequ(ground_height, data.pos.y) || ground_height > data.pos.y || fequ(data.vel.y, 0.0f))
+		{
+			glm::vec3 normal = platforms->get_normal(data.pos.x, data.pos.z);
+			/* the rock is outside of the platform */
+			if (glm::all(glm::greaterThan(normal, glm::vec3(-.1f))))
+				data.vel = glm::reflect(data.vel, normal);
+		}
+
+		/* kill rock if under ocean */
+		if (data.pos.y < -10.0f)
+		{
+			i32 index = entity_index;
+			ecs.remove(entities[index]);
+			entities.remove(index);
+		}
 	}
 };
