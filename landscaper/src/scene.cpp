@@ -74,7 +74,7 @@ auto scene::render_scene(glm::mat4 & view, glm::vec4 & plane, timer & t, bool is
 
 auto scene::update(input_handler & ih, timer & time) -> game_state *
 {
-	entities.update(ih, physics, time.elapsed());
+	entities.update(ih, platforms, time.elapsed());
 	ih.cursor_moved() = false;
 
 	return nullptr;

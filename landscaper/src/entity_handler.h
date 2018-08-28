@@ -20,7 +20,7 @@ public:
 	auto prepare(glm::mat4 & view, glm::vec4 & plane) -> void;
 	auto render(bool is_main_target) -> void;
 
-	auto update(input_handler & ih, physics_handler & ph, f32 elapsed) -> void;
+	auto update(input_handler & ih, platform_handler & ph, f32 elapsed) -> void;
 public:
 	inline auto entity_cam(void) -> camera & { return cam; };
 private:
@@ -31,7 +31,7 @@ private:
 	auto create_display(entity & user, glm::vec3 const & pos, i32 index) -> void;
 	auto create_main(entity & user, input_handler & ih, platform_handler & ph, i32 index) -> void;
 	auto create_remote(void) -> entity;
-	auto create_rock(void) -> void;
+	auto create_rock(platform_handler & ph) -> void;
 	auto init_player(entity & ent) -> void;
 	auto bind_camera_to(i32 index) -> void;
 private:

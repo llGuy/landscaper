@@ -8,6 +8,7 @@
 #include "ecs/display.h"
 #include "ecs/graphics.h"
 #include "ecs/terraforming.h"
+#include "ecs/rock_physics.h"
 #include "ecs/mouse_control.h"
 #include "ecs/player_physics.h"
 #include "ecs/basic_components.h"
@@ -19,9 +20,9 @@ entity_handler::entity_handler(void)
 {
 }
 
-auto entity_handler::update(input_handler & ih, physics_handler & ph, f32 elapsed) -> void
+auto entity_handler::update(input_handler & ih, platform_handler & ph, f32 elapsed) -> void
 {
-	for (; pending_rocks.size() != 0; create_rock());
+	for (; pending_rocks.size() != 0; create_rock(ph));
 
 	ecs.update_except<graphics>(elapsed, entities);
 
@@ -90,6 +91,7 @@ auto entity_handler::create_ecs(void) -> void
 	ecs.add_system<graphics>(32);
 	ecs.add_system<is_flying>(32);
 	ecs.add_system<rock_throw>(32);
+	ecs.add_system<rock_physics>(32);
 	ecs.add_system<mouse_control>(2);
 	ecs.add_system<terraforming>(32);
 	ecs.add_system<max_walk_speed>(32);
@@ -143,7 +145,7 @@ auto entity_handler::create_remote(void) -> entity
 	return entity();
 }
 
-auto entity_handler::create_rock(void) -> void
+auto entity_handler::create_rock(platform_handler & ph) -> void
 {
 	auto rock = pending_rocks.top();
 	pending_rocks.pop();
@@ -154,11 +156,13 @@ auto entity_handler::create_rock(void) -> void
 	auto & data = new_rock.get_data();
 	data.pos = rock.start_position;
 	data.dir = rock.start_direction;
+	data.speed = 40.0f;
 	data.size = 0.25f;
 	/* add components for the rock entity */
 	ecs.add_component<height>(new_rock, index, height{ 0 });
 	ecs.add_component<color>(new_rock, index, color{ glm::vec3(1, 0.5, 0.2) });
 	ecs.add_component<graphics>(new_rock, index, model, shaders);
+	ecs.add_component<rock_physics>(new_rock, index, ph);
 
 	entities.push_back(new_rock);
 }
