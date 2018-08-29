@@ -31,7 +31,7 @@ public:
 		if (flying)
 		{
 			ent.vel = glm::vec3(0);
-			ent.speed = 30.0f;
+			ent.speed = 50.0f;
 			at_ground_height = false;
 		}
 

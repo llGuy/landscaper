@@ -28,10 +28,9 @@ public:
 
 		if (fequ(ground_height, data.pos.y) || ground_height > data.pos.y || fequ(data.vel.y, 0.0f))
 		{
-			glm::vec3 normal = platforms->get_normal(data.pos.x, data.pos.z);
+			auto normal = platforms->get_normal(data.pos.x, data.pos.z);
 			/* the rock is outside of the platform */
-			if (glm::all(glm::greaterThan(normal, glm::vec3(-.1f))))
-				data.vel = glm::reflect(data.vel, normal);
+			if (normal.has_value()) data.vel = glm::reflect(data.vel, normal.value());
 		}
 
 		/* kill rock if under ocean */

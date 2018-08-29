@@ -23,9 +23,7 @@ entity_handler::entity_handler(void)
 auto entity_handler::update(input_handler & ih, platform_handler & ph, f32 elapsed) -> void
 {
 	for (; pending_rocks.size() != 0; create_rock(ph));
-
 	ecs.update_except<graphics>(elapsed, entities);
-
 	cam.update_view_matrix(entities, ecs);
 }
 
@@ -163,7 +161,6 @@ auto entity_handler::create_rock(platform_handler & ph) -> void
 	ecs.add_component<color>(new_rock, index, color{ glm::vec3(1, 0.5, 0.2) });
 	ecs.add_component<graphics>(new_rock, index, model, shaders);
 	ecs.add_component<rock_physics>(new_rock, index, ph);
-
 }
 
 auto entity_handler::init_player(entity & ent) -> void

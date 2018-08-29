@@ -20,7 +20,7 @@ public:
 	auto render(glm::mat4 & view_matrix) -> void;
 
 	auto get_ground_height(f32 x, f32 z) -> f32;
-	auto get_normal(f32 x, f32 z) -> glm::vec3;
+	auto get_normal(f32 x, f32 z) -> std::optional<glm::vec3>;
 
 	/* when there will be multiple platforms, there will be an array */
 	auto operator[](u32 i) -> default_platform & { return platform1; };

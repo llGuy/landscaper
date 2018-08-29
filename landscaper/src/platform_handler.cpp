@@ -101,7 +101,7 @@ auto platform_handler::get_ground_height(f32 x, f32 z) -> f32
 	return platform1.height_at(x, z);
 }
 
-auto platform_handler::get_normal(f32 x, f32 z) -> glm::vec3
+auto platform_handler::get_normal(f32 x, f32 z) -> std::optional<glm::vec3>
 {
 	return platform1.normal_at(x, z);
 }

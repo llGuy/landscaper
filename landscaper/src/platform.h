@@ -3,6 +3,7 @@
 #include <array>
 #include "types.h"
 #include "mound.h"
+#include <optional>
 #include "math/barry_centric.h"
 
 template<u32 Width, u32 Depth> class platform
@@ -70,11 +71,11 @@ public:
 		return height;
 	}
 
-	auto normal_at(f32 x, f32 z) -> glm::vec3
+	auto normal_at(f32 x, f32 z) -> std::optional<glm::vec3>
 	{
 		glm::vec3 normal;
 
-		if (outside_platform(x, z)) return glm::vec3(-1);
+		if (outside_platform(x, z)) return std::optional<glm::vec3>{};
 
 		glm::vec2 position_on_tile{ x - floor(x), z - floor(z) };
 		u32 tri_indices[3];
@@ -90,7 +91,7 @@ public:
 			normal = get_normal(tile_coord, glm::vec2(1, 1), glm::vec2(0, 1), tri_indices);
 		}
 
-		return normal;
+		return std::make_optional(normal);
 	}
 
 	template <typename T> auto is_on_platform_mesh_space(T px, T pz) -> bool
