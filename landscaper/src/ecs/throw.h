@@ -38,8 +38,9 @@ public:
 private:
 	auto create_rock(entity_data & player_data, f32 height) -> void
 	{
-		auto rock_start_position = player_data.pos + glm::vec3(0, height + 1.0f, 0);
+		auto rock_start_position = player_data.pos + glm::vec3(0, height + 2.0f, 0);
 		auto rock_start_direction = player_data.dir;
+		rock_start_position += player_data.dir * 0.1f;
 
 		/* initialize rock and push to pending rocks */
 		rock_data new_rock
