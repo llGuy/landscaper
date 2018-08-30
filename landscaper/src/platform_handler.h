@@ -13,6 +13,7 @@ public:
 	platform_handler(void);
 	// creates first platform
 	auto create(resource_handler & rh, glm::mat4 & proj) -> void;
+	auto add_platform(glm::vec3 const & neg_corner) -> void;
 
 	// needs batch rendering system to work
 	auto prepare(glm::vec3 & camera, glm::vec3 & light_pos, glm::vec4 & clip_plane) -> void;
@@ -23,15 +24,16 @@ public:
 	auto get_normal(f32 x, f32 z) -> std::optional<glm::vec3>;
 
 	/* when there will be multiple platforms, there will be an array */
-	auto operator[](u32 i) -> default_platform & { return platform1; };
+	auto operator[](u32 i) -> default_platform & { return platforms[i]; };
 
 	auto mound_prot(void) -> default_mound & { return mound_prototype; };
+	auto which_platform(f32 x, f32 z) -> i32;
 private:
 	auto create_shaders(glm::mat4 & proj) -> void;
 	auto create_realistic_texture(std::string const & begin_dir, realistic_texture & tex, resource_handler & rh) -> void;
 private:
 	default_platform_model model;
-	default_platform platform1;
+	std::vector<default_platform> platforms;
 
 	default_mound mound_prototype;
 

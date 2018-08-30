@@ -14,7 +14,7 @@ private:
 	platform_handler * platforms;
 	input_handler * mouse_input;
 
-	bool terraforming = false;
+	i32 platform_being_modified { -1 };
 	glm::vec2 terraforming_point;
 
 	i32 height_component_index;
@@ -34,60 +34,60 @@ public:
 		if (mouse_input->got_mouse_button(GLFW_MOUSE_BUTTON_2))
 		{
 			/* terraform at the point the player is facing */
-			if (!terraforming)
+			if (platform_being_modified == -1)
 			{
-				auto point = get_point_player_is_facing(data, entity_height);
-				if (point.has_value())
-				{
-					/* place terraforming mound */
-					terraforming = true;
-					terraforming_point = point.value();
-				}
+				get_point_player_is_facing(data, entity_height);
 			}
 			else
 			{
-				auto & platf = platforms->operator[](0);
+				auto & platf = platforms->operator[](platform_being_modified);
 				update_mound(td);
 				platf.changed() = true;
 			}
 		}
 		else
 		{
-			terraforming = false;
+			platform_being_modified = -1;
 		}
 	}
 private:
-	auto get_point_player_is_facing(entity_data & ent, f32 height) -> std::optional<glm::vec2>
+	auto get_point_player_is_facing(entity_data & ent, f32 height) -> void
 	{
 		using detail::fequ;
 
-		for (ray ray_cast(ent.pos + glm::vec3(0, height, 0), ent.dir, 0.25f, 8.0f);
-			ray_cast.distance_covered() < ray_cast.distance_max();
-			ray_cast.extend())
+		platform_being_modified = platforms->which_platform(ent.pos.x, ent.pos.z);
+
+		if (platform_being_modified != -1)
 		{
-			auto ray_pos = ray_cast.current_position();
-			f32 platform_height_at_ray = platforms->get_ground_height(ray_pos.x, ray_pos.z);
-			if (fequ(platform_height_at_ray, ray_pos.y) || platform_height_at_ray > ray_pos.y)
+			for (ray ray_cast(ent.pos + glm::vec3(0, height, 0), ent.dir, 0.25f, 8.0f);
+				ray_cast.distance_covered() < ray_cast.distance_max();
+				ray_cast.extend())
 			{
-				f32 x = glm::round(ray_pos.x);
-				f32 z = glm::round(ray_pos.z);
+				auto ray_pos = ray_cast.current_position();
+				f32 platform_height_at_ray = platforms->get_ground_height(ray_pos.x, ray_pos.z);
+				if (fequ(platform_height_at_ray, ray_pos.y) || platform_height_at_ray > ray_pos.y)
+				{
+					f32 x = glm::round(ray_pos.x);
+					f32 z = glm::round(ray_pos.z);
 
-				glm::vec3 world = glm::vec3(x, platform_height_at_ray, z);
+					glm::vec3 world = glm::vec3(x, platform_height_at_ray, z);
 
-				glm::vec2 mesh_space = platforms->operator[](0).get_platform_space_coord(world);
+					glm::vec2 mesh_space = platforms->operator[](platform_being_modified).get_platform_space_coord(world);
 
-				if (platforms->operator[](0).is_within_mesh_space(mesh_space.x, mesh_space.y, default_mound_size))
-					return std::make_optional<glm::vec2>(mesh_space);
-				else return std::optional<glm::vec2>();
+					/* check if mound will overlap with the borders */
+					if (platforms->operator[](platform_being_modified).is_within_mesh_space(mesh_space.x, mesh_space.y, default_mound_size))
+					{
+						terraforming_point = mesh_space;
+					}
+				}
 			}
 		}
-		return std::optional<glm::vec2>();
 	}
 
 	auto update_quarter(glm::ivec2 const & pos, i32 intensity_x, i32 intensity_z,
 		bool update_center, bool update_radius, f32 td) -> void
 	{
-		auto & plat = platforms->operator[](0);
+		auto & plat = platforms->operator[](platform_being_modified);
 		auto & mound = platforms->mound_prot();
 
 		for (u32 moundindex = 0; moundindex < mound.size(); ++moundindex)
@@ -109,7 +109,7 @@ private:
 				{
 					if (true)
 					{
-						f32 & vert_y = platforms->operator[](0).operator[](mp.coord);
+						f32 & vert_y = platforms->operator[](platform_being_modified).operator[](mp.coord);
 						f32 newHeight = vert_y + mp.quotient * 18.0f;
 						if (vert_y < newHeight) vert_y += mp.quotient * 18.0f* td;
 					}

@@ -6,13 +6,21 @@ platform_handler::platform_handler(void)
 {
 }
 
+auto platform_handler::add_platform(glm::vec3 const & neg_corner) -> void
+{
+	platforms.push_back(default_platform());
+	platforms.back().create(neg_corner.y, glm::vec2(neg_corner.x, neg_corner.z));
+}
+
 auto platform_handler::create(resource_handler & rh, glm::mat4 & proj) -> void
 {
 	model.create(rh);
-	platform1.create(1.5f, { model.negative_corner().x, model.negative_corner().z });
 
 	create_realistic_texture("res/textures/grass/grass", grass, rh);
 	create_realistic_texture("res/textures/dirt/dirt", dirt, rh);
+
+	add_platform(glm::vec3(-((float)platform_width) / 2.0f, 1.5f, -((float)platform_depth) / 2.0f));
+	add_platform(glm::vec3(150.0f, 2.0f, -100.0f));
 
 	create_shaders(proj);
 }
@@ -33,10 +41,13 @@ auto platform_handler::prepare(glm::vec3 & camera, glm::vec3 & light_pos, glm::v
 	dirt.color.bind(GL_TEXTURE_2D, 2);
 	dirt.normal_map.bind(GL_TEXTURE_2D, 3);
 
-	if (platform1.changed())
+	for (auto & platf : platforms)
 	{
-		platform1.update_gpu();
-		platform1.changed() = false;
+		if (platf.changed())
+		{
+			platf.update_gpu();
+			platf.changed() = false;
+		}
 	}
 }
 
@@ -46,11 +57,15 @@ auto platform_handler::render(glm::mat4 & view_matrix) -> void
 	shaders.uniform_mat4(&view_matrix[0][0], 1);
 
 	auto neg_corner = model.negative_corner();
-	shaders.uniform_3f(&neg_corner[0], 2);
 
-	model.attach_platform_instance(platform1);
+	for (auto & platf : platforms)
+	{
+		glm::vec3 coord = platf.coordinate();
+		shaders.uniform_3f(&coord[0], 2);
+		model.attach_platform_instance(platf);
+		render_model(model, GL_TRIANGLES);
+	}
 
-	render_model(model, GL_TRIANGLES);
 }
 
 auto platform_handler::create_shaders(glm::mat4 & proj) -> void
@@ -98,10 +113,26 @@ auto platform_handler::create_realistic_texture(std::string const & begin_dir, r
 
 auto platform_handler::get_ground_height(f32 x, f32 z) -> f32
 {
-	return platform1.height_at(x, z);
+	for (auto & platf : platforms)
+		if(!platf.outside_platform(x, z))
+			return platf.height_at(x, z);
+
+	return 0;
 }
 
 auto platform_handler::get_normal(f32 x, f32 z) -> std::optional<glm::vec3>
 {
-	return platform1.normal_at(x, z);
+	for (auto & platf : platforms)
+		if (!platf.outside_platform(x, z))
+			return platf.normal_at(x, z);
+
+	return std::optional<glm::vec3>();
+}
+
+auto platform_handler::which_platform(f32 x, f32 z) -> i32
+{
+	for (u32 i = 0; i < platforms.size(); ++i)
+		if (!platforms[i].outside_platform(x, z))
+			return i;
+	return -1;
 }

@@ -36,6 +36,12 @@ public:
 		return glm::vec2(world_pos.x - neg_corner_xz.x, world_pos.z - neg_corner_xz.y);
 	}
 
+	/* negative x and z corner */
+	auto coordinate(void) -> glm::vec3
+	{
+		return glm::vec3(neg_corner_xz.x + (float)(Width) / 2.0f, 0, neg_corner_xz.y + (float)(Depth) / 2.0f);
+	}
+
 	auto update_gpu(void) -> void
 	{
 		height_buffer.fill(heights.size() * sizeof(f32), heights.data(), GL_STATIC_DRAW, GL_ARRAY_BUFFER);
@@ -55,9 +61,11 @@ public:
 		/* indices of the triangle */
 		u32 indices[3];
 
+		auto platform_coord = coordinate();
+
 		/* get corner of tile in platform space (starting from 0, 0) */
-		glm::vec2 tile_coord{ floor(x) + static_cast<f32>(Width) / 2.0f,
-			floor(z) + static_cast<f32>(Depth) / 2.0f };
+		glm::vec2 tile_coord { floor(x) + static_cast<f32>(Width) / 2.0f - platform_coord.x,
+			floor(z) + static_cast<f32>(Depth) / 2.0f - platform_coord.z };
 
 		if (position_on_tile.y <= position_on_tile.x)
 		{
@@ -79,8 +87,11 @@ public:
 
 		glm::vec2 position_on_tile{ x - floor(x), z - floor(z) };
 		u32 tri_indices[3];
-		glm::vec2 tile_coord (floor(x) + static_cast<f32>(Width) / 2.0f,
-			floor(z) + static_cast<f32>(Depth) / 2.0f);
+
+		auto platform_coord = coordinate();
+
+		glm::vec2 tile_coord{ floor(x) + static_cast<f32>(Width) / 2.0f - platform_coord.x,
+			floor(z) + static_cast<f32>(Depth) / 2.0f - platform_coord.z };
 
 		if (position_on_tile.y <= position_on_tile.x)
 		{
@@ -112,6 +123,23 @@ public:
 		return x > rad && Width - x > rad &&
 			z > rad && Depth - z > rad;
 	}
+	auto outside_platform(f32 x, f32 z) -> bool
+	{
+		f32 dim_x = static_cast<f32>(Width) - 1.0f;
+		f32 dim_z = static_cast<f32>(Depth) - 1.0f;
+
+		f32 height = 0;
+
+		/* if outisde of platform */
+		if (x > dim_x + neg_corner_xz.x ||
+			x < neg_corner_xz.x ||
+			z > dim_z + neg_corner_xz.y ||
+			z < neg_corner_xz.y)
+		{
+			return true;
+		}
+		else return false;
+	}
 private:
 	auto create_heights(void) -> void
 	{
@@ -135,24 +163,6 @@ private:
 	template <typename T> auto index(T x, T z) -> u32
 	{
 		return static_cast<u32>(x) + Width * static_cast<u32>(z);
-	}
-
-	auto outside_platform(f32 x, f32 z) -> bool
-	{
-		f32 dim_x = static_cast<f32>(Width) - 1.0f;
-		f32 dim_z = static_cast<f32>(Depth) - 1.0f;
-
-		f32 height = 0;
-
-		/* if outisde of platform */
-		if (x > dim_x + neg_corner_xz.x ||
-			x < neg_corner_xz.x ||
-			z > dim_z + neg_corner_xz.y ||
-			z < neg_corner_xz.y)
-		{
-			return true;
-		}
-		else return false;
 	}
 	/* offsets for to get the other 2 sides of the triangle */
 	auto get_height(glm::vec2 const & offset1, glm::vec2 const & offset2,
