@@ -39,6 +39,7 @@ public:
 		entity_data & ent         = entities[entity_index].get_data();
 
 		/* need to get ground height */
+
 		ground_height = platforms->get_ground_height(ent.pos.x, ent.pos.z);
 
 		ent.pos += ent.vel * td;
@@ -71,8 +72,8 @@ private:
 	{
 		f32 vel_y = ent.vel.y;
 
-		ent.vel.x *= (1.0f - td / 2.0f);
-		ent.vel.z *= (1.0f - td / 2.0f);
+		ent.vel.x *= (1.0f - td / 5.0f);
+		ent.vel.z *= (1.0f - td / 5.0f);
 
 		ent.vel.y = vel_y + gravity_at_sea * td;
 		at_ground_height = false;

@@ -20,7 +20,9 @@ auto platform_handler::create(resource_handler & rh, glm::mat4 & proj) -> void
 	create_realistic_texture("res/textures/dirt/dirt", dirt, rh);
 
 	add_platform(glm::vec3(-((float)platform_width) / 2.0f, 1.5f, -((float)platform_depth) / 2.0f));
-	add_platform(glm::vec3(150.0f, 2.0f, -100.0f));
+	add_platform(glm::vec3(250.0f, 2.0f, -150.0f));
+	add_platform(glm::vec3(-150.0f, 2.0f, 250.0f));
+	add_platform(glm::vec3(300.0f, 2.0f, 250.0f));
 
 	create_shaders(proj);
 }

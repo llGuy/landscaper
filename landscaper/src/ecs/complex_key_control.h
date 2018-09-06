@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ecs.h"
+#include "../timer.h"
 #include "../detail.h"
 #include "../input_handler.h"
 #include "basic_components.h"
@@ -9,6 +10,7 @@ template <> class component <struct complex_key_control> : public icomponent
 {
 private:
 	/* pointer to input handler */
+	timer fly_timer;
 	input_handler * inputs;
 	i32 flying_component_index;
 	i32 at_ground_height_component_index;
@@ -16,6 +18,7 @@ public:
 	component(entity & subject, i32 entity_index, input_handler & ih)
 		: inputs(&ih), icomponent::icomponent(entity_index)
 	{
+		fly_timer.start();
 		flying_component_index = subject.get_component_index<is_flying>();
 		at_ground_height_component_index = subject.get_component_index<is_at_ground_height>();
 	}
@@ -31,11 +34,15 @@ public:
 		if (flying)
 		{
 			ent.vel = glm::vec3(0);
-			ent.speed = 50.0f;
+			ent.speed = 20.0f;
 			at_ground_height = false;
 		}
 
-		if (inputs->got_key(GLFW_KEY_P)) flying ^= true;
+		if (inputs->got_key(GLFW_KEY_P) && fly_timer.elapsed() > 3.0f)
+		{
+			flying ^= true;
+			fly_timer.reset();
+		}
 
 		if (at_ground_height || flying)
 		{
@@ -50,7 +57,7 @@ public:
 
 			if (count == 0) ent.speed = 0;
 
-			if (inputs->got_key(GLFW_KEY_LEFT_SHIFT)) move(-up, ent.vel, td, count, ent);
+			if (flying && inputs->got_key(GLFW_KEY_LEFT_SHIFT)) move(-up, ent.vel, td, count, ent);
 
 			if (inputs->got_key(GLFW_KEY_SPACE))
 			{

@@ -7,7 +7,7 @@
 scene::scene(i32 w, i32 h, glm::vec2 const & cursor_pos, resource_handler & rh, input_handler & ih)
 	: screen_res{ w, h }
 {
-	auto projection = glm::perspective(glm::radians(60.0f), (f32)w / (f32)h, 0.1f, 10000.0f);
+	auto projection = glm::perspective(glm::radians(85.0f), (f32)w / (f32)h, 0.1f, 10000.0f);
 
 	sky_box.create(rh, projection);
 	pipeline.create(w, h, rh);

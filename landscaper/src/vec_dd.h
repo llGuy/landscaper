@@ -3,8 +3,8 @@
 #include <new>
 #include <stack>
 #include <vector>
-/* vec_dd = vector with delayed deletion */
 
+/* vec_dd = vector with delayed deletion */
 template <typename T> class vec_dd
 {
 private:
