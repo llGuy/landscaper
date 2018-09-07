@@ -7,6 +7,7 @@
 #include "graphics.h"
 #include "basic_components.h"
 #include "../input_handler.h"
+#include "../batch_renderer.h"
 
 using entity_model = cube;
 
@@ -15,11 +16,11 @@ template <> class component <struct add_display> : public icomponent
 private:
 	timer add_timer;
 	program * shaders;
-	entity_model * model;
+	batch_renderer_3D * renderer;
 	input_handler * input;
 public:
-	component(entity & subject, i32 index, input_handler & ih, entity_model & model, program & shaders)
-		: input(&ih), icomponent::icomponent(index), model(&model), shaders(&shaders)
+	component(entity & subject, i32 index, input_handler & ih, batch_renderer_3D & rnd)
+		: input(&ih), icomponent::icomponent(index), renderer(&rnd)
 	{
 		add_timer.start();
 	}
@@ -39,7 +40,7 @@ public:
 
 			ecs.add_component<color>(new_entity, at_display, color{ glm::vec3(1) });
 			ecs.add_component<display>(new_entity, at_display);
-			ecs.add_component<graphics>(new_entity, at_display, *model, *shaders);
+			ecs.add_component<graphics>(new_entity, at_display, *renderer);
 
 			add_timer.reset();
 		}

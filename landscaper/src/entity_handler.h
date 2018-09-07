@@ -8,6 +8,7 @@
 #include "physics.h"
 #include "rock_data.h"
 #include "input_handler.h"
+#include "batch_renderer.h"
 #include "platform_handler.h"
 
 using entity_model = cube;
@@ -27,8 +28,9 @@ public:
 private:
 	auto create_shaders(glm::mat4 & projection) -> void;
 private:
-	// component stuff
+	/* component stuff */
 	auto create_ecs(void) -> void;
+	auto create_batch_renderer(void) -> void;
 	auto create_display(entity & user, glm::vec3 const & pos, i32 index) -> void;
 	auto create_main(entity & user, input_handler & ih, platform_handler & ph, i32 index) -> void;
 	auto create_remote(void) -> entity;
@@ -46,6 +48,7 @@ private:
 	 * the entity_handler will make sure to add the pending rocks to the
 	 * vector of entities */
 	rock_stack pending_rocks;
+	batch_renderer_3D batch_renderer;
 	camera cam;
 	entity_cs ecs;
 };

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <optional>
 #include <GL/glew.h>
 #include <stdint.h>
 #include "buffer.h"
@@ -8,8 +9,9 @@ extern auto unbind_vertex_layouts(void) -> void;
 
 struct attribute
 {
+	attribute(void) = default;
 	attribute(u32 type, GLenum size, 
-		GLenum normalized, u32 stride, void * ptr, bool d)
+		GLenum normalized, u32 stride, void * ptr, std::optional<i32> d = {})
 		: t(type), s(size), n(normalized), st(stride), p(ptr), divisor(d)
 	{
 	}
@@ -19,7 +21,7 @@ struct attribute
 	GLenum n;
 	u32 st;
 	void * p;
-	bool divisor;
+	std::optional<i32> divisor;
 };
 
 class vertex_layout
@@ -40,11 +42,12 @@ public:
 	}
 
 	auto counter(void) -> u32;
-private:
+
 	auto add_attrib(attribute a) -> void
 	{
 		glEnableVertexAttribArray(count);
-		if (a.divisor) glVertexAttribDivisor(count, 1);
+		if (a.divisor.has_value()) 
+			glVertexAttribDivisor(count, a.divisor.value());
 		glVertexAttribPointer(count++, a.s, a.t, a.n, a.st, a.p);
 	};
 private:

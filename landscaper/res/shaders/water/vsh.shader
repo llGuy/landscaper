@@ -5,6 +5,7 @@ out vec4 clip_space;
 out vec2 texture_coords;
 out vec3 to_camera;
 out vec3 from_light_vector;
+out vec4 world_position;
 
 uniform vec3 camera_position;
 uniform mat4 projection_matrix;
@@ -17,6 +18,7 @@ const float tiling = 6.0f;
 void main(void)
 {
 	gl_ClipDistance[0] = -1;
+	world_position = vec4(vertex_position, 1.0f);
 	clip_space = projection_matrix * view_matrix * vec4(vertex_position, 1.0f);
 	gl_Position = clip_space;
 

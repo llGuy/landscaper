@@ -9,17 +9,34 @@
 class batch_renderer_3D
 {
 private:
-	renderable * render_model;
-	std::vector<std::unique_ptr<buffer>> buffers;
-	std::vector<u32> sizes;
+	u32 size;
 	u32 buffer_max_size;
+	buffer attrib_buffer;
+	renderable * render_model;
 public:
-	batch_renderer_3D(u32 max_size);
-	auto empty_buffer(u32 index);
-	auto push_matrix(f32 * data, u32 index);
-	auto prepare_matrix_attribute(u32 index);
-	auto bind(renderable * model);
+	batch_renderer_3D(void) = default;
+	batch_renderer_3D(u32 attrib_size, u32 max_size);
+	auto layout_count(void) -> u32;
+	auto empty_buffer(void) -> void;
+	auto bind(renderable * model) -> void;
 	/* draw call types */
-	auto draw_de(GLenum mode);
-	auto draw_deinstanced(GLenum mode);
+	auto draw_de(GLenum mode) -> void;
+	auto draw_deinstanced(GLenum mode) -> void;
+
+	template <typename T> auto push_attrib(T && attrib) -> void;
+	template <typename ... T> auto prepare_instance_attrib(T ... attribs) -> void;
 };
+
+template <typename T> auto batch_renderer_3D::push_attrib(T && attrib) -> void
+{
+	attrib_buffer.partial_fill(size * sizeof(T), sizeof(T), &attrib, GL_ARRAY_BUFFER);
+	size++;
+}
+
+template <typename ... T> auto batch_renderer_3D::prepare_instance_attrib(T ... attribs) -> void
+{
+	auto & model_layout = render_model->vao();
+	model_layout.bind();
+	attrib_buffer.bind(GL_ARRAY_BUFFER);
+	(model_layout.add_attrib(attribs), ...);
+}

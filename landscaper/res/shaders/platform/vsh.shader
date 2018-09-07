@@ -16,7 +16,7 @@ uniform vec4 clip_plane;
 
 void main(void)
 {
-	pass_world_position = vec3(vertex_position.x, height, vertex_position.y);
+	pass_world_position = vec3(vertex_position.x, height, vertex_position.y) + neg_corner;
 	gl_Position = projection_matrix * view_matrix * vec4(pass_world_position, 1);
 
 	pass_texture_coords = texture_coords * dimension / 16.0f;

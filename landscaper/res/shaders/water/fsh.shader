@@ -5,6 +5,7 @@ in vec4 clip_space;
 in vec2 texture_coords;
 in vec3 to_camera;
 in vec3 from_light_vector;
+in vec4 world_position;
 
 uniform sampler2D reflection_texture;
 uniform sampler2D dudv_map;
@@ -13,14 +14,25 @@ uniform sampler2D depth_texture;
 uniform vec3 camera_position;
 uniform float move_factor;
 
-const vec3 light_color = vec3(1, 0.5, 0) * 0.7;
-//const vec3 light_color = vec3(1);
+//const vec3 light_color = vec3(1, 0.5, 0) * 0.7;
+const vec3 light_color = vec3(1);
 const float wave_strength = 0.02f;
-const float shine_damper = 40.0f;
-const float reflectivity = 0.6;
+const float shine_damper = 150.0f;
+const float reflectivity = 0.4;
 
 const float near = 0.001f;
 const float far = 1000.0f;
+const float density = 0.001f;
+const float gradient = 1.5f;
+const vec4 sky_color = vec4(0.4, 0.4 ,0.4, 1.0);
+
+float calculate_visibility(vec4 relative_to_camera)
+{
+	float distance = length(relative_to_camera.xyz);
+	float visib = exp(-pow((distance * density), gradient));
+	visib = clamp(visib, 0.0, 1.0);
+	return visib;
+}
 
 float convert_depth(float raw)
 {
@@ -60,6 +72,7 @@ void main(void)
 //		power(specular, 31);
 	vec3 specular_highlights = light_color * specular * reflectivity;
 
-	final_color = reflection_color + vec4(specular_highlights, 0.0f);
-	final_color = mix(final_color, vec4(0, 0.5, 0.5, 1.0), 0.5);
+	final_color = reflection_color;//  +vec4(specular_highlights, 0.0f);
+	final_color = mix(final_color, vec4(0, 0.5, 0.5, 1.0), 0.2);
+	final_color = mix(sky_color, final_color, calculate_visibility(vec4(camera_position, 1.0f) - world_position));
 }

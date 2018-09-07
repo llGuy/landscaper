@@ -25,7 +25,7 @@ const vec3 light_color = vec3(1, 0.5, 0) * 0.7;
 
 vec3 calculate_diffuse(vec3 normal)
 {
-	float diffuse = clamp(dot(to_light, normal) * 0.5f, 0, 1);
+	float diffuse = clamp(dot(to_light, normal) * 0.8f, 0, 1);
 	return vec3(diffuse, diffuse, diffuse);
 }
 
@@ -82,5 +82,5 @@ void main(void)
 	//vec4 specular = vec4(calculate_specular(face_normal).xyz, 1.0f);
 	//vec4 diffuse = vec4(calculate_diffuse(face_normal).xyz, 1.0f);
 
-	final_color = mix(dirt_color, grass_color, angle_cos) + diffuse * 0.8f + specular;
+	final_color = mix(dirt_color, grass_color, angle_cos) + diffuse + specular;
 }

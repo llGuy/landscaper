@@ -1,6 +1,7 @@
 #include "entity_handler.h"
 #include "render_pipeline.h"
 #include <glm/gtx/transform.hpp>
+#include "player_attribute_gpu.h"
 #include <glm/gtx/string_cast.hpp>
 /* libraries for components */
 #include "ecs/log.h"
@@ -18,7 +19,7 @@
 #include "ecs/complex_key_control.h"
 
 entity_handler::entity_handler(void)
-	: model(2.0f)
+	: model(2.0f), batch_renderer(sizeof player_attribute, 100)
 {
 }
 
@@ -33,6 +34,7 @@ auto entity_handler::create(glm::mat4 & projection, resource_handler & rh, input
 {
 	model.create(rh);
 	create_shaders(projection);
+	create_batch_renderer();
 
 	create_ecs();
 
@@ -50,20 +52,17 @@ auto entity_handler::create_shaders(glm::mat4 & projection) -> void
 {
 	shaders.create_shader(GL_VERTEX_SHADER, "shaders/entity/vsh.shader");
 	shaders.create_shader(GL_FRAGMENT_SHADER, "shaders/entity/fsh.shader");
-	shaders.link_shaders("vertex_position");
-	shaders.get_uniform_locations("projection_matrix", "view_matrix", "plane", "model_color", "model_matrix");
+	shaders.link_shaders("vertex_position", "player_color", "translation_matrix");
+	shaders.get_uniform_locations("projection_matrix", "view_matrix", "plane");
 	shaders.use();
 	shaders.uniform_mat4(&projection[0][0], 0);
 }
 
 auto entity_handler::prepare(glm::mat4 & view, glm::vec4 & plane) -> void
 {
-	glm::vec3 color { 1 };
-
 	shaders.use();
 	shaders.uniform_mat4(&view[0][0], 1);
 	shaders.uniform_4f(&plane[0], 2);
-	shaders.uniform_3f(&color[0], 3);
 }
 
 auto entity_handler::render(bool is_main_target) -> void
@@ -77,6 +76,8 @@ auto entity_handler::render(bool is_main_target) -> void
 		}
 		else return true;
 	});
+	batch_renderer.draw_deinstanced(GL_TRIANGLES);
+	batch_renderer.empty_buffer();
 }
 
 auto entity_handler::create_ecs(void) -> void
@@ -113,7 +114,7 @@ auto entity_handler::create_display(entity & user, glm::vec3 const & pos, i32 in
 
 	ecs.add_component<color>(user, index, color{ glm::vec3(1) });
 	ecs.add_component<display>(user, index);
-	ecs.add_component<graphics>(user, index, model, shaders);
+	ecs.add_component<graphics>(user, index, batch_renderer);
 }
 
 auto entity_handler::create_main(entity & user, input_handler & ih, platform_handler & ph, i32 index) -> void
@@ -138,9 +139,9 @@ auto entity_handler::create_main(entity & user, input_handler & ih, platform_han
 	ecs.add_component<hill_sliding>(user, index, ih, ph);
 	ecs.add_component<player_physics>(user, index, ph);
 	ecs.add_component<terraforming>(user, index, ih, ph);
-	ecs.add_component<graphics>(user, index, model, shaders);
+	ecs.add_component<graphics>(user, index, batch_renderer);
 	ecs.add_component<rock_throw>(user, index, ih, pending_rocks);
-	ecs.add_component<add_display>(user, index, ih, model, shaders);
+	ecs.add_component<add_display>(user, index, ih, batch_renderer);
 }
 
 auto entity_handler::create_remote(void) -> entity
@@ -165,7 +166,7 @@ auto entity_handler::create_rock(platform_handler & ph) -> void
 	/* add components for the rock entity */
 	ecs.add_component<height>(new_rock, index, height{ 0 });
 	ecs.add_component<color>(new_rock, index, color{ glm::vec3(1, 0.5, 0.2) });
-	ecs.add_component<graphics>(new_rock, index, model, shaders);
+	ecs.add_component<graphics>(new_rock, index, batch_renderer);
 	ecs.add_component<rock_physics>(new_rock, index, ph);
 }
 
@@ -182,4 +183,23 @@ auto entity_handler::init_player(entity & ent) -> void
 auto entity_handler::bind_camera_to(i32 index) -> void
 {
 	cam.bind_entity(index, entities);
+}
+
+auto entity_handler::create_batch_renderer(void) -> void
+{
+	batch_renderer.bind(&model);
+	batch_renderer.empty_buffer();
+	
+	model.element_buffer().value()->bind(GL_ELEMENT_ARRAY_BUFFER);
+
+	attribute color_attribute{ GL_FLOAT, 4, GL_FALSE, sizeof player_attribute, nullptr, std::make_optional<i32>(1) };
+
+	attribute matrix_attributes[4];
+	for (i32 i = 0; i < 4; ++i)
+		new(matrix_attributes + i) attribute(GL_FLOAT, 4, GL_FALSE, sizeof player_attribute, (void*)(sizeof(glm::vec4) * (i + 1)), 
+			std::make_optional<i32>(1));
+
+	batch_renderer.prepare_instance_attrib(color_attribute,
+		matrix_attributes[0], matrix_attributes[1],
+		matrix_attributes[2], matrix_attributes[3]);
 }
